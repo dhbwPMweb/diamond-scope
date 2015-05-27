@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- TODO make it local -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <!-- TODO please outsource to style.css -->
+        <style>
+            html, body {
+                height: 100%;
+                overflow: hidden;
+            }
+            
+            body > #video-background {
+                position: fixed;
+                width: 100%;
+            }
+            
+            #video-background-inner {
+                position: absolute;
+                left: -25%;
+                top: -25%;
+                width: 150%;
+            }
+            
+            body > .container-fluid {
+                height: 15%;
+                background-color: aqua;
+            }
+            
+            body > #main-center.container-fluid {
+                height: 70%;
+                background-color: coral;
+            }
+            
+            #main-card {
+                height: 100%;
+                overflow: hidden;
+            }
+            
+            #main-card #main-card-content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index:5;
+                color: #ffffff;
+            }
+        </style>
+    </head>
+    <body>
+        <video id="video-background" autoplay loop>
+            <source src="assets/videos/QuzzeldullBackgroundLoop.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="container-fluid"></div>
+        <div id="main-center" class="container-fluid">
+            <div class="col-md-2"></div>
+            <div id="main-card" class="col-md-8 panel">
+                <video id="video-background-inner" autoplay loop>
+                    <source src="assets/videos/QuzzeldullBackgroundLoopBlur.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div id="main-card-content">
+                    This is where the content goes!
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="container-fluid"></div>
+    </body>
+</html>
