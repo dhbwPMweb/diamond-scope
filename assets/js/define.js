@@ -1,6 +1,6 @@
 // File
 
-var SERVER_URL = "http://wwwlehre.dhbw-stuttgart.de/~it14006/";
+var SERVER_URL = "http://wwwlehre.dhbw-stuttgart.de/~it14006/"; // TODO
 var QUESTION_FILE = "q.json";
 
 // Konstanten
