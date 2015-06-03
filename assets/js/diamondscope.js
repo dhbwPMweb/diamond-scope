@@ -61,11 +61,20 @@ Game.prototype = {
 		//difficulty from 0 to 3
 		var offset;
 		switch(difficulty){
-			case 0: offset = 0; break;
-			case 1: offset = 5; break;
-			case 2: offset = 10; break;
-			case 3: offset = 14; break;
-			default: offset = 0;
+			case 0:
+				offset = 0;
+				break;
+			case 1:
+				offset = 5;
+				break;
+			case 2:
+				offset = 10;
+				break;
+			case 3:
+				offset = 14;
+				break;
+			default: 
+				offset = 0;
 		}
 		
 		//distribution[0] is the right answer
