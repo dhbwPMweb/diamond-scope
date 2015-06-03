@@ -29,7 +29,12 @@ Player.prototype = {
     
     useJoker: function (joker){ //joker 1:fifty 2:audience
         if(joker == 1) this.joker.fifty = 0;
-        if(joker == 2) this.joker.audience = 0;
+        if(joker == 2) {
+			if(this.joker.audience != 0){
+				this.joker.audience = 0;
+				game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
+			}			
+		}
     },
     
 }
@@ -46,6 +51,47 @@ Game.prototype = {
     addPlayer: function (){
         //Your Code goes here...
     },
+	
+	useAudience: function(difficulty, rightAnswer){
+		//simulates the voting results of an audience based on the difficulty
+		//returns an array containing 4 integers between 0-100
+		//the percentage of the correct answer is located at the "rightAnswer"-index
+
+
+		//difficulty from 0 to 3
+		var offset;
+		switch(difficulty){
+			case 0:
+				offset = 0;
+				break;
+			case 1:
+				offset = 5;
+				break;
+			case 2:
+				offset = 10;
+				break;
+			case 3:
+				offset = 14;
+				break;
+			default: 
+				offset = 0;
+		}
+		
+		//distribution[0] is the right answer
+		var distribution = [];
+		distribution[0] = parseInt(Math.random()*20)+40-offset;
+		distribution[1] = parseInt((100-distribution[0])/3 * (Math.random()+0.4));
+		distribution[2] = parseInt((100-distribution[0])/3 * (Math.random()+0.4));
+		distribution[3] = 100-distribution[0]-distribution[1]-distribution[2];
+		
+		//switch distribution[rightAnswer] with distribution[0]
+		var tmp = distribution[rightAnswer];
+		distribution[rightAnswer] = distribution[0];
+		distribution[0] = tmp;
+		
+		return distribution;
+	},
+}
     
     //...
     
