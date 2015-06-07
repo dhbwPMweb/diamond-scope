@@ -1,3 +1,15 @@
+//TODO Servus Design Team hier, ich habe leider keine Ahnung wo zur Hölle das hin muss, lasst das mal den tobuto machen
+
+$(window).resize(function() {
+    alert();
+    if(($(window).outerHeight)/9>($(window).outerWidth)/16) {
+        alert();
+        $('body > #video-background').css({'width': 'auto', 'height': '100%'});
+    }
+});
+
+//TODO Danke, das war's auch schon ;)
+
 var Question = function (question, answers, rightAnswer, difficulty, id){
     this.question = question;
     this.answers = answers;
@@ -95,11 +107,11 @@ Game.prototype = {
     
     //...
     
-};
+/*}*/; //TODO Dinge die nicht funktionieren, fixen!
     
 var DiamondScope = (function (){
     
-    var questionArray = [],
+    //var questionArray = [], //TODO s.o.
     var game;
    
     var init = function (){
