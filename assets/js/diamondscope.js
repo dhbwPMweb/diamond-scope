@@ -52,6 +52,26 @@ Game.prototype = {
         //Your Code goes here...
     },
 	
+	useFiftyFifty: function(rightAnswer){
+		//"removes" two wrong answers
+		//returns an array containing 4 boolean values
+		//false values represent deleted answers, true represents the two left choices
+		
+		var fifty = [false, false, false, false];
+		fifty[rightAnswer] = true;
+		
+		//get a random answer which mustn't be the correct answer
+		var random = parseInt(Math.random()*4);
+		while(random == rightAnswer)
+		{
+			random = parseInt(Math.random()*4);
+		}
+		
+		fifty[random] = true;
+		
+		return fifty;
+	},
+	
 	useAudience: function(difficulty, rightAnswer){
 		//simulates the voting results of an audience based on the difficulty
 		//returns an array containing 4 integers between 0-100
