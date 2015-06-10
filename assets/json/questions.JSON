@@ -2,7 +2,7 @@
 	{
 		"question": "abc?",
 		"answers": ["A","B","C","D"],
-		"rigthAnswer": 0, //--> 0:A, 1:B, 2:C, 3:D
+		"rigthAnswer": 0,
 		"difficulty": 0,
 		"id": 0
 	},
@@ -10,7 +10,7 @@
 	{
 		"question": "abc?",
 		"answers": ["A","B","C","D"],
-		"rigthAnswer": 0, //--> 0:A, 1:B, 2:C, 3:D
+		"rigthAnswer": 0,
 		"difficulty": 0,
 		"id": 1
 	}
