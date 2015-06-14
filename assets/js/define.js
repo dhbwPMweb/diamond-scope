@@ -13,5 +13,6 @@ var difficulty = {
     low: 0,
     intermediate: 1,
     hard: 2,
-    extreme: 3
+    extreme: 3,
+    ultrakrank: 4
 };
