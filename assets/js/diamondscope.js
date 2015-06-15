@@ -135,10 +135,14 @@ var DiamondScope = (function (){
     var eventhandler = function (){
         
         $(window).resize(function() {
-            if(($(window).outerHeight)/9>($(window).outerWidth)/16) {
-                $('body > #video-background').css({'width': 'auto', 'height': '100%'});
-            }
-        });
+           if(($(window).outerHeight())/9>($(window).outerWidth())/16) {
+               $('body > #video-background').css({'width': 'auto', 'height': '100%'});
+               $('#video-background-inner').css({'width': 'auto', 'height': '150%'});
+           } else {
+               $('body > #video-background').css({'width': '100%', 'height': 'auto'})   
+               $('#video-background-inner').css({'width': '150%', 'height': 'auto'})   
+           }
+       });
         
     };
                             
