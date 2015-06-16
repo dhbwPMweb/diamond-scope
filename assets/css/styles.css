@@ -1,0 +1,155 @@
+ <!-- styles for diamondscope -->
+
+html, body{
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+p {  
+    font-family: Lato;
+    font-variant: small-caps;
+}
+
+body > #video-background {
+    position: fixed;
+    width: 100%;
+}
+            
+#video-background-inner {
+    position: absolute;
+    left: -25%;
+    top: -25%;
+    width: 150%;
+}
+            
+body > .container-fluid {
+    height: 15%;
+    background-color: aqua;
+}
+            
+body > #main-center.container-fluid {
+    height: 70%;
+    background-color: coral;
+}
+            
+            
+#main-card {
+    height: 100%;
+    overflow: hidden;
+    z-index: 4;
+}
+            
+#main-card #main-card-content {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index:5;
+    color: #ffffff;
+}
+
+.rounded-div {
+    border-radius: 1em;
+    border: 0.075em solid #9E9E9E;          
+}
+
+/*
+.main-design {
+}
+**/
+
+.main-design p, h1, h3, h4 {
+    font-family: Lato;
+    color: white;
+    font-variant: small-caps;
+    text-align: center;
+}
+
+.main-design h1{
+    margin-top: 0;
+    font-size: 3.5em;
+}
+
+.margin-design h4{
+    margin-bottom: 0;
+    font-size: 1.5em;
+}
+
+
+@media all and (max-width: 830px) {
+
+.main-design h1, h2, h3, h4, h5{
+    font-size: 1em;
+}
+    
+    
+
+}
+
+
+
+/*#main-card-content-upper-half-header-logo-image {
+    width: 38%;
+}
+
+#main-card-content-upper-half-header-question-count {
+    float: right;
+    width: 25%
+}
+
+#main-card-content-upper-half-header-question-count p{
+    font-size: 3.2em;
+}
+
+#main-card-content-upper-half-question-box {
+    height: 50%;   
+}
+
+#main-card-content-upper-half-question-box p{
+    font-size: 3.5em;
+    text-align: center;
+}
+
+#main-card-content-lower-half-answers-top-right-header p, #main-card-content-lower-half-answers-top-left-header p, 
+
+#main-card-content-lower-half-answers-top-left {
+    width: 35%;
+    margin-left: 7.5%;
+}
+
+#main-card-content-lower-half-answers-top-right {
+    width: 35%;
+    float: right;
+    margin-right: 7.5%;
+}
+
+#main-card-content-lower-half-answers-bottom-left {
+    width: 35%;
+    margin-left: 7.5%;
+    margin-top: 4%;
+}
+
+#main-card-content-lower-half-answers-bottom-right {
+    width: 35%;
+    float: right;
+    margin-right: 7.5%;
+    margin-top: 4%;
+}
+
+#main-card-content-lower-half-buttons-left {
+    width: 15%;
+    float: right;
+    margin-top: 4%;
+    margin-right: 2%;
+    padding: 0.5%;
+}
+
+#main-card-content-lower-half-buttons-right {
+    width: 15%;
+    float: right;
+    margin-top: 4%;
+    margin-right: 7.5%;
+    padding: 0.5%;
+}
+
+**/
