@@ -5,7 +5,7 @@ var DiamondScope = (function (){
     var Question = function (question, answers, rightAnswer, difficulty, id){
         this.question = question;
         this.answers = answers;
-        this.rigthAnswer = rightAnswer;
+        this.rightAnswer = rightAnswer;
         this.difficulty = difficulty;
         this.id = id;
     };
@@ -31,11 +31,18 @@ var DiamondScope = (function (){
     Player.prototype = {
         
         useJoker: function (joker){ //joker 1:fifty 2:audience
-            if(joker == 1) this.joker.fifty = 0;
+            if(joker == 1) {
+                if(this.joker.fifty != 0){
+                    this.joker.fifty = 0;
+                    return game.useFiftyFifty(currentQuestion.rightAnswer);
+                } else {
+                    return [];   
+                }
+            }
             if(joker == 2) {
                 if(this.joker.audience != 0){
                     this.joker.audience = 0;
-                    game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
+                    return game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
                 }			
             }
         },
@@ -51,8 +58,9 @@ var DiamondScope = (function (){
     
     Game.prototype = {
         
-        addPlayer: function (){
-            //Your Code goes here...
+        addPlayer: function (name){
+            id = this.players.length;
+            this.players.push(new Player(id, name));
         },
 	   
         useFiftyFifty: function(rightAnswer){
@@ -91,10 +99,13 @@ var DiamondScope = (function (){
                     offset = 5;
                     break;
                 case 2:
-                    offset = 10;
+                    offset = 9;
                     break;
                 case 3:
-                    offset = 14;
+                    offset = 13;
+                    break;
+                case 4:
+                    offset = 17;
                     break;
                 default: 
                     offset = 0;
@@ -119,6 +130,7 @@ var DiamondScope = (function (){
     };
     
     var questionArray = [];
+    var currentQuestion;
     //    game;
    
     var init = function (){
@@ -126,7 +138,7 @@ var DiamondScope = (function (){
         $.getJSON(SERVER_URL + QUESTION_FILE, function (data){
            questionArray = data;
            questionArray.forEach( function(e, i){
-             questionArray[i] = new Question(e.question, e.answers, e.rigthAnswer, e.difficulty, e.id);
+             questionArray[i] = new Question(e.question, e.answers, e.rightAnswer, e.difficulty, e.id);
 	          });
            initializeGame();
         });
@@ -142,12 +154,51 @@ var DiamondScope = (function (){
                $('body > #video-background').css({'width': '100%', 'height': 'auto'})   
                $('#video-background-inner').css({'width': '150%', 'height': 'auto'})   
            }
-       });
+        });
+        
+        $(document).on('click', '#joker-fifty', function (){
+            
+            answers = game.useFiftyFifty(currentQuestion.rightAnswer);
+            answers.forEach(function (e, i){
+                if(!e){
+                    char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
+                    $('#answer-' + char).html('');
+                }
+            });
+            
+        });
+        
+        $(document).on('click', '#joker-audience', function (){
+            
+            answers = game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
+            answers.forEach(function (e, i){
+                char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
+                $('#answer-' + char).html(answers[i] + '%');
+            });
+            
+        });
+        
+        $(document).on('click', '.answer', function (){
+            id = $(this).data('id');
+            if(id == currentQuestion.rightAnswer){
+                difficulty = getCurrentDifficulty(game.round++);
+                $(this).addClass('green');
+                setTimeout(function(){
+                    drawQuestion(difficulty);
+                }, 1000);
+            } else {
+                $(this).addClass('red');
+                setTimeout(function(){
+                    drawQuestion(difficulty);
+                }, 1000);
+            }
+        });
         
     };
                             
     var initializeGame = function(){
         game = new Game(questionArray);
+        drawQuestion(0); //nur für Testzwecke
     };
     
     var getQuestion = function(difficulty){
@@ -158,13 +209,47 @@ var DiamondScope = (function (){
         
         currentQuestion = selectedQuestions[Math.floor(Math.random()*selectedQuestions.length)];
         
-        delete game.questions[game.questions.indexOf(currentQuestion)];
+        game.questions[game.questions.indexOf(currentQuestion)].difficulty = -1;
         
         return currentQuestion;
     };
     
+    var getCurrentDifficulty = function(round) {
+        
+        return Math.floor(round/3); 
+        
+    };
+    
+    var drawQuestion = function (difficulty){
+        
+        var question = getQuestion(difficulty);
+        
+        var j, i, temp, x = 0;
+        for (i = 0; i < 4; i++) {
+            j = Math.floor(Math.random() * (i + 1));
+            if(j == x) {
+                question.rightAnswer = i;
+                x = i;
+            }
+            temp = question.answers[i];
+            question.answers[i] = question.answers[j];
+            question.answers[j] = temp;
+        }
+        
+        $('#current-question > h3').html('Frage ' + question.id);
+        $('#question').html(question.question);
+        $('#answer-a').html(question.answers[0]);
+        $('#answer-b').html(question.answers[1]);
+        $('#answer-c').html(question.answers[2]);
+        $('#answer-d').html(question.answers[3]);
+        $('.answer').removeClass('red');
+        $('.answer').removeClass('green');
+        
+    };
+    
     return {
-        init 
+        init,
+        drawQuestion
     }
     
 })();
