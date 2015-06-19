@@ -180,8 +180,8 @@ var DiamondScope = (function (){
         
         $(document).on('click', '.answer', function (){
             id = $(this).data('id');
+            difficulty = getCurrentDifficulty(game.round++);
             if(id == currentQuestion.rightAnswer){
-                difficulty = getCurrentDifficulty(game.round++);
                 $(this).addClass('green');
                 setTimeout(function(){
                     drawQuestion(difficulty);
