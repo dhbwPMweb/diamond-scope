@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- TODO make it local -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="assets/css/styles.css" type="text/css">
-		<link href='http://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
-        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="assets/js/define.min.js"></script>
-        <script src="assets/js/diamondscope.js"></script>
-        <!-- TODO please outsource to style.css -->
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- TODO make it local -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="assets/js/define.js"></script>
+    <script src="assets/js/diamondscope.js"></script>
+    <!-- TODO please outsource to style.css -->
     <style>
         html,
         body {
@@ -19,9 +20,9 @@
             overflow: hidden;
         }
     </style>
-        </style>
-    </head>
-    <body>
+</head>
+
+<body>
     <video id="video-background" autoplay loop>
         <source src="assets/videos/QuzzeldullBackgroundLoop.mp4" type="video/mp4">
             Your browser does not support the video tag.
@@ -35,7 +36,7 @@
                     Your browser does not support the video tag.
             </video>
 
-            <div class="container-fluid" style="height: 50%">
+            <div class="container-fluid question-box">
                 <div class="row">
                     <div>
                         <div class="col-xs-5 pull-left">
@@ -53,12 +54,12 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-xs-12 main-design">
+                    <div class="col-xs-12 main-design ">
                         <h1>Wie heißt eine gängige Projektmanagement-Methode?</h1>
                     </div>
                 </div>
             </div>
-            <div class="container-fluid" style="height: 50%">
+            <div class="container-fluid answer-box">
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-4 rounded-div main-design">
@@ -88,10 +89,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-2 pull-right rounded-div">
+                    <div class="col-xs-2 pull-right rounded-div main-design">
                         <h3>Publikum</h3>
                     </div>
-                    <div class="col-xs-2 pull-right rounded-div">
+                    <div class="col-xs-2 pull-right rounded-div main-design">
                         <h3>1 Aus 2</h3>
                     </div>
                 </div>
@@ -99,4 +100,5 @@
         </div>
     </div>
 </body>
+
 </html>
