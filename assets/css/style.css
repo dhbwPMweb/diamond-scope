@@ -1,0 +1,225 @@
+ <!-- styles for diamondscope --> html,
+ body {
+     height: 100% !important;
+     overflow: hidden !important;
+ }
+ 
+ p {
+     font-family: Lato;
+     font-variant: small-caps;
+ }
+ 
+ body > #video-background {
+     position: fixed;
+     width: 100%;
+ }
+ 
+ #video-background-inner {
+     position: absolute;
+     left: -25%;
+     top: -25%;
+     width: 150%;
+ }
+ 
+ body > .container-fluid {
+     height: 15%;
+     background-color: aqua;
+ }
+ 
+ body > #main-center.container-fluid {
+     height: 70%;
+     background-color: coral;
+ }
+ 
+ .question-box,
+ answer-box {
+     height: 50%;
+ }
+ 
+ #main-card {
+     height: 100%;
+     overflow: hidden;
+     z-index: 4;
+ }
+ 
+ #main-card #main-card-content {
+     position: absolute;
+     width: 100%;
+     top: 0;
+     left: 0;
+     z-index: 5;
+     color: #ffffff;
+ }
+ 
+ .rounded-div {
+     border-radius: 1em;
+     border: 0.075em solid #9E9E9E;
+     margin: 5px;
+     transition: 0.3s ease;
+ }
+ 
+ .answer > h4 {
+     margin-top: -1em;
+     padding: 1em 0;
+ }
+ 
+ .joker-button:hover,
+ .answer:hover {
+     box-shadow: 0px 0px 2px 2px white;
+     -webkit-box-shadow: 0px 0px 2px 2px white;
+     -moz-box-shadow: 0px 0px 2px 2px white;
+     -o-box-shadow: 0px 0px 2px 2px white;
+     background-color: rgba(255, 255, 255, 0.3);
+     cursor: pointer;
+ }
+ 
+ .joker-button.red,
+ .answer.red {
+     box-shadow: 0px 0px 3px 3px rgba(220, 45, 17, 0.8);
+     -webkit-box-shadow: 0px 0px 3px 3px rgba(220, 45, 17, 0.8);
+     -moz-box-shadow: 0px 0px 3px 3px rgba(220, 45, 17, 0.8);
+     -o-box-shadow: 0px 0px 3px 3px rgba(220, 45, 17, 0.8);
+     background-color: rgba(220, 45, 17, 0.3);
+     border-color: transparent;
+ }
+ 
+ .joker-button.green,
+ .answer.green {
+     box-shadow: 0px 0px 3px 3px rgba(45, 220, 17, 0.8);
+     -webkit-box-shadow: 0px 0px 3px 3px rgba(45, 220, 17, 0.8);
+     -moz-box-shadow: 0px 0px 3px 3px rgba(45, 220, 17, 0.8);
+     -o-box-shadow: 0px 0px 3px 3px rgba(45, 220, 17, 0.8);
+     background-color: rgba(45, 220, 17, 0.3);
+     border-color: transparent;
+ }
+ 
+ .joker-button {
+     margin-top: 15px;
+     height: 30px;
+ }
+ 
+ .joker-button h4 {
+     margin: 0;
+     margin-top: 5px;
+ }
+ /*
+.main-design {
+}
+**/
+ 
+ .main-design p,
+ h1,
+ h3,
+ h4 {
+     font-family: Lato;
+     color: white;
+     font-variant: small-caps;
+     text-align: center;
+ }
+ 
+ .main-design h1 {
+     margin-top: 0;
+     font-size: 3.5em;
+ }
+ 
+ .main-design h4 {
+     margin-bottom: 0;
+     font-size: 1.5em;
+ }
+ 
+ .answer {
+     height: 7em;
+ }
+ 
+ @media all and (max-width: 992px) {
+     .question-box {
+         height: 35%;
+     }
+     .answer-box {
+         height: 65%;
+     }
+     .main-design h1 {
+         font-size: 2.5em;
+     }
+     .main-design h3 {
+         font-size: 1.75em;
+     }
+     .main-design h4 {
+         font-size: 1em;
+     }
+     .answer {
+         height: 5em;
+     }
+ }
+}
+@media all and (max-width: 840px) {
+    .question-box {
+        height: 30%;
+    }
+    
+    .answer-box {
+        height: 70%;
+    }
+    
+    .main-design h1 {
+        font-size: 2em;
+    }
+    
+    .main-design h3 {
+        font-size: 1.25em;
+    }
+    
+    .main-design h4 {
+        font-size: 0.75em;
+    }
+}
+@media all and (max-width: 768px) {
+    .question-box {
+        height: 25%;
+    }
+    
+    .answer-box {
+        height: 75%;
+    }
+    
+    .main-design h1 {
+        font-size: 1.5em;
+    }
+    
+    .main-design h3 {
+        font-size: 1em;
+    }
+    
+    .main-design h4 {
+        font-size: 0.75em;
+    }
+    .answer {
+         height: 4em;
+     }
+    .joker-button{
+        width: 75px;
+    }
+}
+}
+@media all and (max-width: 600px) {
+    .question-box {
+        height: 20%;
+    }
+    .answer-box {
+        height: 80%;
+    }
+    .main-design h1 {
+        font-size: 1em;
+    }
+    .main-design h3 {
+        font-size: 0.9em;
+    }
+    .main-design h4 {
+        font-size: 0.75em;
+    }
+    
+    .joker-button{
+        width: 75px;
+    }
+}
+}

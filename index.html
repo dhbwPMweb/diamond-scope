@@ -27,9 +27,9 @@
         <source src="assets/videos/QuzzeldullBackgroundLoop.mp4" type="video/mp4">
             Your browser does not support the video tag.
     </video>
-    <div class="container-fluid"></div>
+    <div class="container-fluid md-hidden"></div>
     <div id="main-center" class="container-fluid">
-        <div class="col-md-2"></div>
+        <div class="col-xs-2"></div>
         <div id="main-card" class="col-xs-8 panel rounded-div">
             <video id="video-background-inner" autoplay loop>
                 <source src="assets/videos/QuzzeldullBackgroundLoopBlur.mp4" type="video/mp4">
@@ -40,7 +40,7 @@
                 <div class="row">
                     <div>
                         <div class="col-xs-5 pull-left">
-                            <img src="wiki/img/quzzeldull_logo_text_horizontal.png" class="img-responsive" alt="Diamond Scope">
+                            <img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">
                         </div>
                         <div class="col-xs-4 pull-right">
                             <div class="main-design" id="current-question">
@@ -54,46 +54,50 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-xs-12 main-design ">
-                        <h1>Wie heißt eine gängige Projektmanagement-Methode?</h1>
+                    <div class="col-xs-12 main-design">
+                        <h1 id="question">Wie heißt eine gängige Projektmanagement-Methode?</h1>
                     </div>
                 </div>
             </div>
             <div class="container-fluid answer-box">
                 <div class="row">
                     <div class="col-md-1"></div>
-                    <div class="col-md-4 rounded-div main-design">
-                        <h4>Antwort 1</h4>
-                        <h1>Duke1</h1>
+                    <div class="col-md-4 rounded-div main-design answer" data-id="0">
+                        <h4 class="pull-left">A</h4>
+                        <div class="clearfix"></div>
+                        <h4 id="answer-a">Duke1</h4>
                     </div>
                     <div class="col-md-2"></div>
-                    <div class="col-md-4 rounded-div main-design">
-                        <h4>Antwort 2</h4>
-                        <h1>Prince2</h1>
+                    <div class="col-md-4 rounded-div main-design answer" data-id="1">
+                        <h4 class="pull-left">B</h4>
+                        <div class="clearfix"></div>
+                        <h4 id="answer-b">Prince2</h4>
                     </div>
                     <div class="col-md-1"></div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
                     <div class="col-md-1"></div>
-                    <div class="col-md-4 rounded-div main-design">
-                        <h4>Antwort 3</h4>
-                        <h1>King4</h1>
+                    <div class="col-md-4 rounded-div main-design answer" data-id="2">
+                        <h4 class="pull-left">C</h4>
+                        <div class="clearfix"></div>
+                        <h4 id="answer-c">King4</h4>
                     </div>
                     <div class="col-md-2"></div>
-                    <div class="col-md-4 rounded-div main-design">
-                        <h4>Antwort 4</h4>
-                        <h1>Queen3</h1>
+                    <div class="col-md-4 rounded-div main-design answer" data-id="3">
+                        <h4 class="pull-left">D</h4>
+                        <div class="clearfix"></div>
+                        <h4 id="answer-d">Queen3</h4>
                     </div>
                     <div class="col-md-1"></div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-2 pull-right rounded-div main-design">
-                        <h3>Publikum</h3>
+                    <div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-audience">
+                        <h4>Publikum</h4>
                     </div>
-                    <div class="col-xs-2 pull-right rounded-div main-design">
-                        <h3>1 Aus 2</h3>
+                    <div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-fifty">
+                        <h4>2 Aus 4</h4>
                     </div>
                 </div>
             </div>
