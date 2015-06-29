@@ -131,9 +131,11 @@ var DiamondScope = (function (){
     
     var questionArray = [];
     var currentQuestion;
+    var currentDifficulty;
     //    game;
    
     var init = function (){
+        sizeCheck();
         eventhandler();
         $.getJSON(SERVER_URL + QUESTION_FILE, function (data){
            questionArray = data;
@@ -147,13 +149,7 @@ var DiamondScope = (function (){
     var eventhandler = function (){
         
         $(window).resize(function() {
-           if(($(window).outerHeight())/9>($(window).outerWidth())/16) {
-               $('body > #video-background').css({'width': 'auto', 'height': '100%'});
-               $('#video-background-inner').css({'width': 'auto', 'height': '150%'});
-           } else {
-               $('body > #video-background').css({'width': '100%', 'height': 'auto'})   
-               $('#video-background-inner').css({'width': '150%', 'height': 'auto'})   
-           }
+           sizeCheck();
         });
         
         $(document).on('click', '#joker-fifty', function (){
@@ -170,7 +166,7 @@ var DiamondScope = (function (){
         
         $(document).on('click', '#joker-audience', function (){
             
-            answers = game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
+            answers = game.useAudience(getCurrentDifficulty(game.round), currentQuestion.rightAnswer);
             answers.forEach(function (e, i){
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
                 $('#answer-' + char).html(answers[i] + '%');
@@ -180,7 +176,8 @@ var DiamondScope = (function (){
         
         $(document).on('click', '.answer', function (){
             id = $(this).data('id');
-            difficulty = getCurrentDifficulty(game.round++);
+            round = (game.round < 15) ? game.round++ : game.round = 0;
+            difficulty = getCurrentDifficulty(round);
             if(id == currentQuestion.rightAnswer){
                 $(this).addClass('green');
                 setTimeout(function(){
@@ -194,6 +191,16 @@ var DiamondScope = (function (){
             }
         });
         
+    };
+    
+    var sizeCheck = function (){
+        if(($(window).outerHeight())/9>($(window).outerWidth())/16) {
+            $('body > #video-background').css({'width': 'auto', 'height': '100%'});
+            $('#video-background-inner').css({'width': 'auto', 'height': '150%'});
+        } else {
+            $('body > #video-background').css({'width': '100%', 'height': 'auto'})   
+            $('#video-background-inner').css({'width': '150%', 'height': 'auto'})   
+        }  
     };
                             
     var initializeGame = function(){
@@ -209,7 +216,7 @@ var DiamondScope = (function (){
         
         currentQuestion = selectedQuestions[Math.floor(Math.random()*selectedQuestions.length)];
         
-        game.questions[game.questions.indexOf(currentQuestion)].difficulty = -1;
+        currentQuestion.difficulty = -1;
         
         return currentQuestion;
     };
@@ -248,8 +255,7 @@ var DiamondScope = (function (){
     };
     
     return {
-        init,
-        drawQuestion
+        init: init,
     }
     
 })();
