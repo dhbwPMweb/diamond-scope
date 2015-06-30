@@ -93,6 +93,111 @@
      border-color: transparent;
  }
  
+ @keyframes yellow-right {
+     0% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     40% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     to {
+         box-shadow: 0px 0px 2px 2px white;
+         -webkit-box-shadow: 0px 0px 2px 2px white;
+         -moz-box-shadow: 0px 0px 2px 2px white;
+         -o-box-shadow: 0px 0px 2px 2px white;
+         background-color: rgba(255, 255, 255, 0.3);
+     }
+ }
+ 
+ @-webkit-keyframes yellow-right {
+     0% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     40% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     to {
+         box-shadow: 0px 0px 2px 2px white;
+         -webkit-box-shadow: 0px 0px 2px 2px white;
+         -moz-box-shadow: 0px 0px 2px 2px white;
+         -o-box-shadow: 0px 0px 2px 2px white;
+         background-color: rgba(255, 255, 255, 0.3);
+     }
+ }
+ 
+ @-moz-keyframes yellow-right {
+     0% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     40% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     to {
+         box-shadow: 0px 0px 2px 2px white;
+         -webkit-box-shadow: 0px 0px 2px 2px white;
+         -moz-box-shadow: 0px 0px 2px 2px white;
+         -o-box-shadow: 0px 0px 2px 2px white;
+         background-color: rgba(255, 255, 255, 0.3);
+     }
+ }
+ 
+ @-o-keyframes yellow-right {
+     0% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     40% {
+         box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -webkit-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -moz-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         -o-box-shadow: 0px 0px 3px 3px rgba(200, 180, 50, 0.8);
+         background-color: rgba(200, 180, 50, 0.3);
+     }
+     to {
+         box-shadow: 0px 0px 2px 2px white;
+         -webkit-box-shadow: 0px 0px 2px 2px white;
+         -moz-box-shadow: 0px 0px 2px 2px white;
+         -o-box-shadow: 0px 0px 2px 2px white;
+         background-color: rgba(255, 255, 255, 0.3);
+     }
+ }
+ 
+ .joker-button.yellow,
+ .answer.yellow {
+     animation: 0.3s yellow-right infinite alternate;
+     -webkit-animation: 0.3s yellow-right infinite alternate;
+     -moz-animation: 0.3s yellow-right infinite alternate;
+     -o-animation: 0.3s yellow-right infinite alternate;
+     border-color: transparent;
+ }
+ 
  .joker-button {
      margin-top: 15px;
      height: 30px;
@@ -193,10 +298,12 @@
     .main-design h4 {
         font-size: 0.75em;
     }
+    
     .answer {
-         height: 4em;
-     }
-    .joker-button{
+        height: 4em;
+    }
+    
+    .joker-button {
         width: 75px;
     }
 }
@@ -217,8 +324,7 @@
     .main-design h4 {
         font-size: 0.75em;
     }
-    
-    .joker-button{
+    .joker-button {
         width: 75px;
     }
 }
