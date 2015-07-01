@@ -1,3 +1,13 @@
+//TODO Bitte dahin, wo es hingehört, thx
+        
+$(window).load(function () {
+    setTimeout(function () {
+        $('body > #loading').css('opacity', '0');
+    }, 1500);
+});
+
+//End TODO
+
 var game;
 
 var DiamondScope = (function () {
@@ -137,7 +147,7 @@ var DiamondScope = (function () {
     //    game;
 
     var init = function () {
-        sizeCheck();
+        sizeCheck();        
         eventhandler();
         $.getJSON(SERVER_URL + QUESTION_FILE, function (data) {
             questionArray = data;

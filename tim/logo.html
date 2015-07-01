@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- TODO make it local -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="assets/js/define.js"></script>
+    <script src="assets/js/diamondscope.js"></script>
+    <!-- TODO please outsource to style.css -->
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="video-background" autoplay loop>
+        <source src="assets/videos/QuzzeldullBackgroundLoop.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+    </video>
+    <div class="container-fluid md-hidden"></div>
+    <div id="main-center" class="container-fluid">
+        <div class="col-xs-2"></div>
+        <div id="main-card" class="col-xs-8 panel rounded-div">
+            <video id="video-background-inner" autoplay loop>
+                <source src="assets/videos/QuzzeldullBackgroundLoopBlur.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+            </video>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="assets/svgs/quzzeldull_logo_text.svg" class="single-logo" alt="Diamond Scope">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
