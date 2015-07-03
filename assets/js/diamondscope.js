@@ -552,6 +552,37 @@ var DiamondScope = (function () {
 
         };
 
+        var endScreen = function () {
+
+            content = '<div class="container-fluid question-box">' +
+                '<div class="row">' +
+                '<div>' +
+                '<div class="col-xs-5 pull-left">' +
+                '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
+                '</div>' +
+                '<div class="main-design" id="player">' +
+                '<h4>Spieler X</h4>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="vertical-center-2" data-container="#main-center"><div class="row">' +
+                '<div class="col-xs-12 main-design">' +
+                '<h1 id="question">Gl&uuml;ckwunsch Bernd! Sie haben 4 von 15 Fragen richtig beantwortet!</h1>' +
+                '<h1 id="question">1. Bernd - 4/15 Fragen</h1>' +
+                '<h1 id="question">2. Dieter - 3/15 Fragen</h1>' +
+                '<h1 id="question">3. Tom B. - 0/15 Fragen</h1>' +
+                '</div>' +
+                '</div>' +
+                '<div class="menu-button col-centered rounded-div main-design btn" id="singleplayer-button">' +
+                '<h1>Neues Spiel</h1>' +
+                '</div></div>' +
+                '</div>';
+
+            $('#content-div').html(content);
+
+        };
+
         var frage = function (difficulty) { //draw.question!
 
             function getQuestion(difficulty) {
@@ -601,8 +632,8 @@ var DiamondScope = (function () {
         };
 
         var endView = function () {
-            game = new Game(questionArray);
-            startMenu();
+            //game = new Game(questionArray);
+            changeScreen(endScreen);
         };
 
         var changeScreen = function (func) {
