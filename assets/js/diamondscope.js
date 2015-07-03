@@ -523,22 +523,18 @@ var DiamondScope = (function () {
                 '<div class="container-fluid">' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="0">' +
                 '<h4 class="pull-left">A</h4>' +
-                '<div class="clearfix"></div>' +
                 '<h4 id="answer-a">Duke1</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="1">' +
                 '<h4 class="pull-left">B</h4>' +
-                '<div class="clearfix"></div>' +
                 '<h4 id="answer-b">Prince2</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="2">' +
                 '<h4 class="pull-left">C</h4>' +
-                '<div class="clearfix"></div>' +
                 '<h4 id="answer-c">King4</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="3">' +
                 '<h4 class="pull-left">D</h4>' +
-                '<div class="clearfix"></div>' +
                 '<h4 id="answer-d">Queen3</h4>' +
                 '</div>' +
                 '</div>' +

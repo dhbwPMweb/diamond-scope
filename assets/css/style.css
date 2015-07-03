@@ -157,7 +157,10 @@
  }
  
  .btn,
- .btn h1 {
+ .btn h1,
+ .btn h2,
+ .btn h3,
+ .btn h4 {
      cursor: pointer !important;
  }
  
@@ -490,6 +493,10 @@
      }
      .answer {
          height: 5em;
+     }
+     .answer-box h4 {
+         font-size: 1.4em;
+         margin-top: 0.5%;
      }
  }
  
