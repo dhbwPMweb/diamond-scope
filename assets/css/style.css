@@ -1,27 +1,28 @@
  <!-- styles for diamondscope --> html,
- body {
+ body,
+ {
      height: 100% !important;
      overflow: hidden !important;
  }
  
-* {
-     -webkit-user-select: none !important;
-     -moz-user-select: none !important;
-     -ms-user-select: none !important;
-     -o-user-select: none !important;
-     user-select: none !important;
-    cursor: default !important;
-}
-
-input {
-    -webkit-user-select: initial !important;
-    -moz-user-select: initial !important;
-    -ms-user-select: initial !important;
-    -o-user-select: initial !important;
-    user-select: initial !important;  
-    cursor: text !important;
-}
-
+ * {
+     -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+     -ms-user-select: none !important;
+     -o-user-select: none !important;
+     user-select: none !important;
+     cursor: default !important;
+ }
+ 
+ input {
+     -webkit-user-select: initial !important;
+     -moz-user-select: initial !important;
+     -ms-user-select: initial !important;
+     -o-user-select: initial !important;
+     user-select: initial !important;
+     cursor: text !important;
+ }
+ 
  p {
      font-family: Lato;
      font-variant: small-caps;
@@ -80,43 +81,43 @@ input {
      margin-top: -1em;
      padding: 1em 0;
  }
-
-#singleplayer-button {
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
-    font-size: 1.25em;
-}
-
-#multiplayer-button {
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
-    font-size: 1.25em;
-    margin-top: 1%;
-}
-
-#settings-button {
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
-    font-size: 1.25em;
-    margin-top: 1%;
-}
-
-.names {
-    margin-top: 1%;
-    text-align: center;
-    width: 100%;
-    /*height: 3em;*/
-    background: transparent;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid white;
-    font-size: 3.5em;
-    color: white;
-    padding: 0;
-    font-family: Lato;
-    font-variant: small-caps;
-}
-
+ 
+ #singleplayer-button {
+     padding-top: 0.25em;
+     padding-bottom: 0.25em;
+     font-size: 1.25em;
+ }
+ 
+ #multiplayer-button {
+     padding-top: 0.25em;
+     padding-bottom: 0.25em;
+     font-size: 1.25em;
+ }
+ 
+ #settings-button {
+     padding-top: 0.25em;
+     padding-bottom: 0.25em;
+     font-size: 1.25em;
+     margin-top: 1%;
+ }
+ 
+ .names {
+     margin-top: 1%;
+     text-align: center;
+     width: 100%;
+     /*height: 3em;*/
+     
+     background: transparent;
+     outline: none;
+     border: none;
+     border-bottom: 1px solid white;
+     font-size: 3.5em;
+     color: white;
+     padding: 0;
+     font-family: Lato;
+     font-variant: small-caps;
+ }
+ 
  body > #loading {
      position: fixed;
      top: 0;
@@ -133,32 +134,35 @@ input {
      justify-content: center;
      transition: opacity 1s ease;
  }
-
-.start-logo {
-    
-}
-
-.logo-box {
-    height: 40%;
-}
-
-.button-box {
-    height: 60%;
-}
-
-#button-row {
-    margin-top: 10%;  
-}
-
-#player-row {
-    margin-top: 7%;
-}
-
-.col-centered {
-    float: none;
-    margin: 0 auto;
-}
-
+ 
+ .start-logo {}
+ 
+ .logo-box {
+     height: 40%;
+ }
+ 
+ .button-box {
+     height: 60%;
+ }
+ 
+ #button-row {
+     margin-top: 10%;
+ }
+ 
+ #player-row {
+     margin-top: 7%;
+ }
+ 
+ .col-centered {
+     float: none;
+     margin: 0 auto;
+ }
+ 
+ .btn,
+ .btn h1 {
+     cursor: pointer !important;
+ }
+ 
  .joker-button:hover,
  .answer:hover,
  .btn:hover,
@@ -305,6 +309,13 @@ input {
      margin: 0;
      margin-top: 5px;
  }
+ 
+ .menu-button {
+     width: 80%;
+     position: relative;
+     margin-left: 10%;
+     margin-top: 3%;
+ }
  /*
 .main-design {
 }
@@ -335,40 +346,48 @@ input {
      cursor: pointer !important;
  }
  
-@keyframes fade{
-    0% {opacity: 1;}
-    40% {opacity: 0;}
-    60% {opacity: 0;}
-    100% {opacity: 1;}
-}
-
-div.fade {
-    animation-name: fade;
-    animation-duration: 1s;
-    animation-iteration-count: 1;
-}
-
-.joker-button::after {
-    width: 120%;
-    height: 2px;
-    background-color: white;
-    opacity: 0;
-    margin-top: -13%;
-    margin-left: -10%;
-    display: block;
-    content: '';
-    -webkit-transform: rotate(9deg);
-    -moz-transform: rotate(9deg);
-    -o-transform: rotate(9deg);
-    -ms-transform: rotate(9deg);
-    transform: rotate(9deg);
-    transition: 1s ease-in-out;
-}
-
-.disabled::after {
-    opacity: 0.7;
-}
-
+ @keyframes fade {
+     0% {
+         opacity: 1;
+     }
+     40% {
+         opacity: 0;
+     }
+     60% {
+         opacity: 0;
+     }
+     100% {
+         opacity: 1;
+     }
+ }
+ 
+ div.fade {
+     animation-name: fade;
+     animation-duration: 1s;
+     animation-iteration-count: 1;
+ }
+ 
+ .joker-button::after {
+     width: 120%;
+     height: 2px;
+     background-color: white;
+     opacity: 0;
+     margin-top: -13%;
+     margin-left: -10%;
+     display: block;
+     content: '';
+     -webkit-transform: rotate(9deg);
+     -moz-transform: rotate(9deg);
+     -o-transform: rotate(9deg);
+     -ms-transform: rotate(9deg);
+     transform: rotate(9deg);
+     transition: 1s ease-in-out;
+ }
+ 
+ .disabled::after {
+     opacity: 0.7;
+ }
+ 
  @media all and (max-width: 9000px) {
      .question-box {
          height: 35%;
