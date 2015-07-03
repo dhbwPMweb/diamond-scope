@@ -1,13 +1,3 @@
-//TODO Bitte dahin, wo es hingehört, thx
-        
-$(window).load(function () {
-    setTimeout(function () {
-        $('body > #loading').css('opacity', '0');
-    }, 1500);
-});
-
-//End TODO
-
 var game;
 
 var DiamondScope = (function () {
@@ -18,6 +8,7 @@ var DiamondScope = (function () {
         this.rightAnswer = rightAnswer;
         this.difficulty = difficulty;
         this.id = id;
+        this.used = false;
     };
 
     Question.prototype = {
@@ -40,8 +31,8 @@ var DiamondScope = (function () {
 
     Player.prototype = {
 
-        useJoker: function (joker) { //joker 1:fifty 2:audience
-            if (joker == 1) {
+        useJoker: function (joker) { //joker 0:fifty 1:audience
+            if (joker == 0) {
                 if (this.joker.fifty != 0) {
                     this.joker.fifty = 0;
                     return game.useFiftyFifty(currentQuestion.rightAnswer);
@@ -49,10 +40,12 @@ var DiamondScope = (function () {
                     return [];
                 }
             }
-            if (joker == 2) {
+            if (joker == 1) {
                 if (this.joker.audience != 0) {
                     this.joker.audience = 0;
                     return game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
+                } else {
+                    return [];   
                 }
             }
         },
@@ -62,11 +55,21 @@ var DiamondScope = (function () {
     var Game = function (questionArray) {
         this.round = 0;
         this.players = [];
+        this.gameMode = undefined;
         this.ranking = {
             rounds: undefined,
             points: undefined
         };
-        this.questions = questionArray;
+        this.questions = questionArray; 
+        
+        this.questions.forEach( function(e){
+            e.used = false;
+        });
+        
+        this.questionID = 0;
+        this.currentPlayer = 0;
+        this.expulsedPlayers = undefined;
+        this.change = false;
     };
 
     Game.prototype = {
@@ -138,13 +141,33 @@ var DiamondScope = (function () {
             return distribution;
         },
 
-        //...
+        nextPlayer: function () {
+            
+            this.currentPlayer++;
+            if(this.currentPlayer == this.players.length) {
+                this.currentPlayer = 0;
+                this.change = true;   
+            }
+            
+            while(this.expulsedPlayers[this.currentPlayer]){
+                
+                this.change = false;
+                this.currentPlayer++;
+                if(this.currentPlayer == this.players.length){
+                    this.currentPlayer = 0;
+                    this.change = true;
+                }
+                
+            }
+            
+        },
+        
     };
 
     var questionArray = [];
     var currentQuestion;
     var currentDifficulty;
-    //    game;
+    //var game;
 
     var init = function () {
         sizeCheck();        
@@ -163,10 +186,12 @@ var DiamondScope = (function () {
         $(window).resize(function () {
             sizeCheck();
         });
-
+        
         $(document).on('click', '#joker-fifty', function () {
-
-            answers = game.useFiftyFifty(currentQuestion.rightAnswer);
+    
+            $(this).addClass('disabled');
+            
+            answers = game.players[game.currentPlayer].useJoker(0);
             answers.forEach(function (e, i) {
                 if (!e) {
                     char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
@@ -177,8 +202,10 @@ var DiamondScope = (function () {
         });
 
         $(document).on('click', '#joker-audience', function () {
-
-            answers = game.useAudience(getCurrentDifficulty(game.round), currentQuestion.rightAnswer);
+            
+            $(this).addClass('disabled');
+            
+            answers = game.players[game.currentPlayer].useJoker(1);
             answers.forEach(function (e, i) {
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
                 $('#answer-' + char).html(answers[i] + '%');
@@ -188,11 +215,13 @@ var DiamondScope = (function () {
 
         $(document).on('click', '.answer', function () {
             id = $(this).data('id');
-            difficulty = getCurrentDifficulty(game.round++);
             if (id == currentQuestion.rightAnswer) {
                 $(this).addClass('green');
                 setTimeout(function () {
-                    drawQuestion(difficulty);
+                    
+                    if(game.gameMode == 1) game.nextPlayer();
+                        
+                    nextQuestion();
                 }, 1500);
             } else {
                 $(this).addClass('red');
@@ -200,9 +229,8 @@ var DiamondScope = (function () {
                     if ($(this).data('id') == currentQuestion.rightAnswer)
                         $(this).addClass('yellow');
                 });
-
                 setTimeout(function () {
-                    drawQuestion(difficulty);
+                    expulsePlayer();
                 }, 1500);
             }
         });
@@ -233,57 +261,389 @@ var DiamondScope = (function () {
 
     var initializeGame = function () {
         game = new Game(questionArray);
-        drawQuestion(0); //nur für Testzwecke
+        draw.startMenu();
     };
-
-    var getQuestion = function (difficulty) {
-
-        selectedQuestions = $.grep(game.questions, function (e, i) {
-            return e.difficulty == difficulty;
-        });
-
-        currentQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
-
-        currentQuestion.difficulty = -1;
-
-        return currentQuestion;
-    };
-
-    var getCurrentDifficulty = function (round) {
-
-        return Math.floor(round / 3);
-
-    };
-
-    var drawQuestion = function (difficulty) {
-
-        var question = getQuestion(difficulty);
-
-        var j, i, temp, x = 0;
-        for (i = 0; i < 4; i++) {
-            j = Math.floor(Math.random() * (i + 1));
-            if (j == x) {
-                question.rightAnswer = i;
-                x = i;
+    
+    var nextQuestion = function () {
+        
+        if(game.gameMode == 0){ // 0 -> Singleplayer
+            
+            difficulty = Math.floor( (game.round++) / 3);
+            game.questionID++;
+            draw.frage(difficulty);
+            
+        } else if(game.gameMode == 1){ // 1 -> Multiplayer
+            
+            difficulty = Math.floor( (game.round) / 3);
+            if(game.change){
+                game.questionID++;
+                difficulty = Math.floor( (game.round++) / 3);
+                game.change = false;
             }
-            temp = question.answers[i];
-            question.answers[i] = question.answers[j];
-            question.answers[j] = temp;
+            
+            draw.frage(difficulty);
+            
         }
-
-        //Difficulty
-        var category = " (Kategorie: " + (difficulty + 1) + ")";
-        $('#current-question > h3').html('Frage ' + question.id + category);
-        $('#question').html(question.question);
-        $('#answer-a').html(question.answers[0]);
-        $('#answer-b').html(question.answers[1]);
-        $('#answer-c').html(question.answers[2]);
-        $('#answer-d').html(question.answers[3]);
-        $('.answer').removeClass('red');
-        $('.answer').removeClass('green');
-        $('.answer').removeClass('yellow');
-
+        
     };
+    
+    var expulsePlayer = function () {
+        
+        if(game.gameMode == 0){
+            
+            draw.endView();
+            
+        } else if(game.gameMode == 1){
+            
+            game.expulsedPlayers[game.currentPlayer] = true;
+            
+            size = (function (obj){
+                size = 0;
+                for(e in obj) size++;
+                return size;
+            })(game.expulsedPlayers);
+            
+            if(size == game.players.length){
+                
+                draw.endView();
+                
+            } else {
+                
+                game.nextPlayer();
+                nextQuestion();   
+            }
+            
+        }
+        
+    };
+    
+    var draw = (function () {
+        
+        var startMenu = function () {
+            
+            content = '<div class="container-fluid logo-box">' +
+                            '<div class="row">' +
+                                '<div class="col-md-8 col-centered">' +
+                            '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive start-logo" alt="Diamond Scope">' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="container-fluid button-box">' +
+                            '<div class="row start-row">' +
+                                '<div class="col-md-8 col-centered rounded-div main-design btn" id="singleplayer-button">' +
+                                    '<h1>Singleplayer</h1>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row start-row">' +
+                               '<div class="col-md-8 col-centered rounded-div main-design btn" id="multiplayer-button">' +
+                                    '<h1>Multiplayer</h1>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row start-row">' +
+                                '<div class="col-md-8 col-centered rounded-div main-design btn" id="settings-button">' +
+                                    '<h1>Settings</h1> ' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+            
+            $('#content-div').html(content);
+            
+            $('#singleplayer-button').on('click', function(){
+                $(this).off('click');
+                changeScreen(singlePlayer);
+            });
+            
+            $('#multiplayer-button').on('click', function(){
+                $(this).off('click');
+                changeScreen(multiPlayer);
+            });
+            
+        };
+        
+        var singlePlayer = function () {
+            
+            content = '<div class="container-fluid">'+
+                            '<div class="row">'+
+                                '<div>'+
+                                    '<div class="col-xs-5 pull-left">'+
+                                        '<img src="assets/svgs/quzzeldull_logo_text.svg" class="img-responsive" alt="Diamond Scope">'+
+                                    '</div>'+
+                                    '<div class="col-xs-4 pull-right">'+
+                                        '<div class="main-design" id="current-question">'+
+                                           ' <h1>Singleplayer</h1>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="row" id="player-row">'+
+                                '<div class="col-xs-6 col-centered">'+
+                                    '<div class="main-design">'+
+                                        '<h1>Spielername</h1>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="row">'+
+                                '<div class="col-xs-6 col-centered">'+
+                                    '<div class="main-design">'+
+                                        '<input type="text" class="main-design names" id="player-name">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="row" id="button-row">'+
+                                '<div class="col-xs-3 pull-left">'+
+                                    '<div class="main-design rounded-div btn" id="back-button">'+
+                                        '<h1>Go Back</h1>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="col-xs-3 pull-right">'+
+                                    '<div class="main-design rounded-div btn" id="next-button">'+
+                                        '<h1>Next</h1>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+            
+            $('#content-div').html(content);
+            
+            $('#back-button').on('click', function(){
+                $(this).off('click');
+                changeScreen(startMenu);
+            });
+            
+            $('#next-button').on('click', function(){
+                $(this).off('click');
+                game.addPlayer($('#player-name').val());
+                game.gameMode = 0; // 0 -> Singleplayer
+                changeScreen(questionScreen);
+                setTimeout(function () {
+                    nextQuestion();
+                }, 501);
+            });
+            
+        };
+        
+        var multiPlayer = function () {
+            
+            content = '<div class="container-fluid">' +
+                        '<div class="row">' +
+                            '<div>' +
+                                '<div class="col-xs-5 pull-left">' +
+                                    '<img src="assets/svgs/quzzeldull_logo_text.svg" class="img-responsive" alt="Diamond Scope">' +
+                                '</div>' +
+                                '<div class="col-xs-4 pull-right">' +
+                                    '<div class="main-design" id="current-question">' +
+                                        '<h1>Multiplayer</h1>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row" id="player-row">' +
+                            '<div class="col-xs-6 col-centered">' +
+                                '<div class="main-design">' +
+                                    '<h1>Spielernamen</h1>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row">' +
+                            '<div class="col-xs-6 col-centered">' +
+                                '<div class="main-design" id="player-names">' +
+                                    '<input type="text" class="main-design names" id="player-name-1">' +
+                                    '<input type="text" class="main-design names" id="player-name-2">' +
+                                '</div>' +
+                            '</div>                ' +
+                        '</div>' +
+                        '<div class="row" id="button-row">' +
+                            '<div class="col-xs-3">' +
+                                '<div class="main-design rounded-div btn" id="back-button">' +
+                                    '<h1>Go Back</h1>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="col-xs-6 btn-group" role="group">' +
+                                '<div type="button" id="player-2" data-id="2" class="btn rounded-div main-design count selected"><h1>2</h1></div>' +
+                                '<div type="button" id="player-3" data-id="3" class="btn rounded-div main-design count"><h1>3</h1></div>' +
+                                '<div type="button" id="player-4" data-id="4" class="btn rounded-div main-design count"><h1>4</h1></div>' +
+                                '<div type="button" id="player-5" data-id="5" class="btn rounded-div main-design count"><h1>5</h1></div>' +
+                            '</div>' +
+                            '<div class="col-xs-3">' +
+                                '<div class="main-design rounded-div btn" id="next-button">' +
+                                    '<h1>Next</h1>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+            
+            $('#content-div').html(content);
+            
+            $('#back-button').on('click', function () {
+                $(this).off('click');
+                changeScreen(startMenu);
+            });
+            
+            $('.count').on('click', function () {
+                
+                $('.count').removeClass('selected');
+                $(this).addClass('selected');
+                
+                content = "";
+                
+                for(i=1; i <= $(this).data('id'); i++){
+                    content += '<input type="text" class="main-design names" id="player-name-' + i + '">';
+                }
+                
+                
+                $('#player-names').html(content);
+            });
+            
+            $('#next-button').on('click', function () {
+                
+                $('.names').each(function() {
+                    game.addPlayer($(this).val());
+                });
+                
+                game.gameMode = 1; // 1 -> Multiplayer
+                game.questionID++;
+                game.expulsedPlayers = {};
+                changeScreen(questionScreen);
+                setTimeout(function () {
+                    nextQuestion();
+                }, 501);
+                
+            });
+            
+        };
+        
+        var questionScreen = function () {
+            
+            content = '<div class="container-fluid question-box">' +
+                            '<div class="row">' +
+                                '<div>' +
+                                    '<div class="col-xs-5 pull-left">' +
+                                        '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
+                                    '</div>' +
+                                    '<div class="col-xs-4 pull-right">' +
+                                        '<div class="main-design" id="current-question">' +
+                                            '<h3>Frage X</h3>' +
+                                        '</div>' +
+                                        '<div class="main-design" id="player">' +
+                                            '<h4>Spieler X</h4>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="clearfix"></div>' +
+                            '<div class="row">' +
+                                '<div class="col-xs-12 main-design">' +
+                                    '<h1 id="question">Wie heißt eine gängige Projektmanagement-Methode?</h1>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="container-fluid answer-box">' +
+                            '<div class="container-fluid">' +
+                                '<div class="col-md-12 rounded-div main-design answer" data-id="0">' +
+                                    '<h4 class="pull-left">A</h4>' +
+                                    '<div class="clearfix"></div>' +
+                                    '<h4 id="answer-a">Duke1</h4>' +
+                                '</div>' +
+                                '<div class="col-md-12 rounded-div main-design answer" data-id="1">' +
+                                    '<h4 class="pull-left">B</h4>' +
+                                    '<div class="clearfix"></div>' +
+                                    '<h4 id="answer-b">Prince2</h4>' +
+                                '</div>' +
+                                '<div class="col-md-12 rounded-div main-design answer" data-id="2">' +
+                                    '<h4 class="pull-left">C</h4>' +
+                                    '<div class="clearfix"></div>' +
+                                    '<h4 id="answer-c">King4</h4>' +
+                                '</div>' +
+                                '<div class="col-md-12 rounded-div main-design answer" data-id="3">' +
+                                    '<h4 class="pull-left">D</h4>' +
+                                    '<div class="clearfix"></div>' +
+                                    '<h4 id="answer-d">Queen3</h4>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row">' +
+                                '<div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-audience">' +
+                                    '<h4>Publikum</h4>' +
+                                '</div>' +
+                                '<div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-fifty">' +
+                                    '<h4>2 Aus 4</h4>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+            
+            $('#content-div').html(content);
+            
+        };
+        
+        var frage = function (difficulty) { //draw.question!
+
+            function getQuestion (difficulty) {
+            
+                selectedQuestions = $.grep(game.questions, function (e, i) {
+                    return ((e.difficulty == difficulty) && !e.used);
+                });
+                
+                currentQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
+            
+                currentQuestion.used = true;
+            
+                return currentQuestion;
+            };
+            
+            var question = getQuestion(difficulty);
+    
+            var j, i, temp, x = 0;
+            for (i = 0; i < 4; i++) {
+                j = Math.floor(Math.random() * (i + 1));
+                if (j == x) {
+                    question.rightAnswer = i;
+                    x = i;
+                }
+                temp = question.answers[i];
+                question.answers[i] = question.answers[j];
+                question.answers[j] = temp;
+            }
+            
+            //Difficulty
+            category = " (Kategorie: " + (difficulty + 1) + ")";
+            player = "Spieler " + (game.currentPlayer + 1) + " - " + game.players[game.currentPlayer].name;
+            $('#current-question > h3').html('Frage ' + game.questionID + category);
+            $('#player > h4').html(player);
+            $('#question').html(question.question);
+            $('#answer-a').html(question.answers[0]);
+            $('#answer-b').html(question.answers[1]);
+            $('#answer-c').html(question.answers[2]);
+            $('#answer-d').html(question.answers[3]);
+            $('.answer').removeClass('red');
+            $('.answer').removeClass('green');
+            $('.answer').removeClass('yellow');
+            $('.joker-button').removeClass('disabled');
+            if(game.players[game.currentPlayer].joker.audience == 0) $('#joker-audience').addClass('disabled');
+            if(game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
+    
+        };
+        
+        var endView = function () {
+            game = new Game(questionArray);
+            startMenu();  
+        };
+        
+        var changeScreen = function (func){
+            $('#content-div').addClass('fade');
+                setTimeout(function(){
+                    func();
+                    setTimeout(function (){
+                        $('#content-div').removeClass('fade');
+                    }, 500);
+                },500);
+        };
+        
+        return {
+            startMenu: startMenu,
+            frage: frage,
+            endView: endView,
+        };
+        
+    })();
 
     return {
         init: init,
@@ -292,5 +652,19 @@ var DiamondScope = (function () {
 })();
 
 $(function () {
+    $(window).load(function () {
+        
+        setTimeout(function () {
+            
+            $('body > #loading').css('opacity', '0');
+            
+            setTimeout(function (){
+                $('body > #loading').remove();
+            }, 1001);
+            
+        }, 1500);
+        
+    });
+    
     DiamondScope.init();
 });
