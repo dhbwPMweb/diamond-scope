@@ -266,6 +266,10 @@ var DiamondScope = (function () {
         $(".vertical-center").each(function () {
             $(this).css("margin-top", ($($(this).attr("data-container")).outerHeight() / 2) - ($(this).outerHeight()));
         });
+
+        $(".vertical-center-2").each(function () {
+            $(this).css("margin-top", ($($(this).attr("data-container")).outerHeight() / 2) - ($(this).outerHeight() / 2));
+        });
     };
 
     var initializeGame = function () {
@@ -362,19 +366,7 @@ var DiamondScope = (function () {
 
         var singlePlayer = function () {
 
-            content = '<div class="container-fluid">' +
-                '<div class="row">' +
-                '<div>' +
-                '<div class="col-xs-5 pull-left">' +
-                '<img src="assets/svgs/quzzeldull_logo_text.svg" class="img-responsive" alt="Diamond Scope">' +
-                '</div>' +
-                '<div class="col-xs-4 pull-right">' +
-                '<div class="main-design" id="current-question">' +
-                ' <h1>Singleplayer</h1>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
+            content = '<div class="container-fluid vertical-center-2" data-container="#main-center">' +
                 '<div class="row" id="player-row">' +
                 '<div class="col-xs-6 col-centered">' +
                 '<div class="main-design">' +
@@ -390,14 +382,14 @@ var DiamondScope = (function () {
                 '</div>' +
                 '</div>' +
                 '<div class="row" id="button-row">' +
-                '<div class="col-xs-3 pull-left">' +
+                '<div class="player-screen-button pull-left">' +
                 '<div class="main-design rounded-div btn" id="back-button">' +
-                '<h1>Go Back</h1>' +
+                '<h1>Zur&uuml;ck</h1>' +
                 '</div>' +
                 '</div>' +
-                '<div class="col-xs-3 pull-right">' +
+                '<div class="player-screen-button pull-right">' +
                 '<div class="main-design rounded-div btn" id="next-button">' +
-                '<h1>Next</h1>' +
+                '<h1>Weiter</h1>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -424,19 +416,7 @@ var DiamondScope = (function () {
 
         var multiPlayer = function () {
 
-            content = '<div class="container-fluid">' +
-                '<div class="row">' +
-                '<div>' +
-                '<div class="col-xs-5 pull-left">' +
-                '<img src="assets/svgs/quzzeldull_logo_text.svg" class="img-responsive" alt="Diamond Scope">' +
-                '</div>' +
-                '<div class="col-xs-4 pull-right">' +
-                '<div class="main-design" id="current-question">' +
-                '<h1>Multiplayer</h1>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
+            content = '<div class="container-fluid vertical-center-2" data-container="#main-center">' +
                 '<div class="row" id="player-row">' +
                 '<div class="col-xs-6 col-centered">' +
                 '<div class="main-design">' +
@@ -445,29 +425,29 @@ var DiamondScope = (function () {
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="multiplayer-names col-centered relative">' +
                 '<div class="main-design" id="player-names">' +
-                '<input type="text" class="main-design names" id="player-name-1">' +
-                '<input type="text" class="main-design names" id="player-name-2">' +
+                '<input type="text" class="main-design names" id="player-name-1" placeholder="Spieler 1">' +
+                '<input type="text" class="main-design names" id="player-name-2" placeholder="Spieler 2">' +
                 '</div>' +
                 '</div>                ' +
                 '</div>' +
                 '<div class="row" id="button-row">' +
-                '<div class="col-xs-3">' +
+                '<div class="player-screen-button pull-left">' +
                 '<div class="main-design rounded-div btn" id="back-button">' +
-                '<h1>Go Back</h1>' +
+                '<h1>Zur&uuml;ck</h1>' +
                 '</div>' +
                 '</div>' +
-                '<div class="col-xs-6 btn-group" role="group">' +
+                '<div class="player-screen-button pull-right">' +
+                '<div class="main-design rounded-div btn" id="next-button">' +
+                '<h1>Weiter</h1>' +
+                '</div>' +
+                '</div>' +
+                '<div class="multiplayer-count btn-group" role="group">' +
                 '<div type="button" id="player-2" data-id="2" class="btn rounded-div main-design count selected"><h1>2</h1></div>' +
                 '<div type="button" id="player-3" data-id="3" class="btn rounded-div main-design count"><h1>3</h1></div>' +
                 '<div type="button" id="player-4" data-id="4" class="btn rounded-div main-design count"><h1>4</h1></div>' +
                 '<div type="button" id="player-5" data-id="5" class="btn rounded-div main-design count"><h1>5</h1></div>' +
-                '</div>' +
-                '<div class="col-xs-3">' +
-                '<div class="main-design rounded-div btn" id="next-button">' +
-                '<h1>Next</h1>' +
-                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>';
@@ -487,11 +467,13 @@ var DiamondScope = (function () {
                 content = "";
 
                 for (i = 1; i <= $(this).data('id'); i++) {
-                    content += '<input type="text" class="main-design names" id="player-name-' + i + '">';
+                    content += '<input type="text" class="main-design names" id="player-name-' + i + '" placeholder="Spieler ' + i + '">';
                 }
 
 
                 $('#player-names').html(content);
+
+                sizeCheck();
             });
 
             $('#next-button').on('click', function () {
@@ -533,7 +515,7 @@ var DiamondScope = (function () {
                 '<div class="clearfix"></div>' +
                 '<div class="row">' +
                 '<div class="col-xs-12 main-design">' +
-                '<h1 id="question">Wie heißt eine gängige Projektmanagement-Methode?</h1>' +
+                '<h1 id="question">Wie hei&szlig;t eine gängige Projektmanagement-Methode?</h1>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -634,6 +616,7 @@ var DiamondScope = (function () {
                 setTimeout(function () {
                     $('#content-div').removeClass('fade');
                 }, 500);
+                sizeCheck();
             }, 500);
         };
 

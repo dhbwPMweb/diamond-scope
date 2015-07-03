@@ -105,13 +105,11 @@
      margin-top: 1%;
      text-align: center;
      width: 100%;
-     /*height: 3em;*/
-     
      background: transparent;
      outline: none;
      border: none;
      border-bottom: 1px solid white;
-     font-size: 3.5em;
+     font-size: 2.5em;
      color: white;
      padding: 0;
      font-family: Lato;
@@ -316,6 +314,26 @@
      margin-left: 10%;
      margin-top: 3%;
  }
+ 
+ .player-screen-button {
+     position: relative;
+ }
+ 
+ .relative {
+     position: relative;
+ }
+ 
+ .multiplayer-names {
+     width: 50%;
+     margin-left: 25%;
+ }
+ 
+ .multiplayer-count {
+     display: flex;
+     display: -webkit-flex;
+     display: -moz-flex;
+     justify-content: center;
+ }
  /*
 .main-design {
 }
@@ -361,26 +379,92 @@
      }
  }
  
+ @-webkit-keyframes fade {
+     0% {
+         opacity: 1;
+     }
+     40% {
+         opacity: 0;
+     }
+     60% {
+         opacity: 0;
+     }
+     100% {
+         opacity: 1;
+     }
+ }
+ 
+ @-moz-keyframes fade {
+     0% {
+         opacity: 1;
+     }
+     40% {
+         opacity: 0;
+     }
+     60% {
+         opacity: 0;
+     }
+     100% {
+         opacity: 1;
+     }
+ }
+ 
+ @-o-keyframes fade {
+     0% {
+         opacity: 1;
+     }
+     40% {
+         opacity: 0;
+     }
+     60% {
+         opacity: 0;
+     }
+     100% {
+         opacity: 1;
+     }
+ }
+ 
+ @-ms-keyframes fade {
+     0% {
+         opacity: 1;
+     }
+     40% {
+         opacity: 0;
+     }
+     60% {
+         opacity: 0;
+     }
+     100% {
+         opacity: 1;
+     }
+ }
+ 
  div.fade {
      animation-name: fade;
      animation-duration: 1s;
      animation-iteration-count: 1;
+     -webkit-animation-name: fade;
+     -webkit-animation-duration: 1s;
+     -webkit-animation-iteration-count: 1;
+     -moz-animation-name: fade;
+     -moz-animation-duration: 1s;
+     -moz-animation-iteration-count: 1;
+     -o-animation-name: fade;
+     -o-animation-duration: 1s;
+     -o-animation-iteration-count: 1;
+     -ms-animation-name: fade;
+     -ms-animation-duration: 1s;
+     -ms-animation-iteration-count: 1;
  }
  
  .joker-button::after {
-     width: 120%;
+     width: 100%;
      height: 2px;
      background-color: white;
      opacity: 0;
-     margin-top: -13%;
-     margin-left: -10%;
+     margin-top: -7%;
      display: block;
      content: '';
-     -webkit-transform: rotate(9deg);
-     -moz-transform: rotate(9deg);
-     -o-transform: rotate(9deg);
-     -ms-transform: rotate(9deg);
-     transform: rotate(9deg);
      transition: 1s ease-in-out;
  }
  
@@ -408,76 +492,84 @@
          height: 5em;
      }
  }
-}
-@media all and (max-width: 840px) {
-    .question-box {
-        height: 30%;
-    }
-    
-    .answer-box {
-        height: 70%;
-    }
-    
-    .main-design h1 {
-        font-size: 2em;
-    }
-    
-    .main-design h3 {
-        font-size: 1.25em;
-    }
-    
-    .main-design h4 {
-        font-size: 0.75em;
-    }
-}
-@media all and (max-width: 768px) {
-    .question-box {
-        height: 25%;
-    }
-    
-    .answer-box {
-        height: 75%;
-    }
-    
-    .main-design h1 {
-        font-size: 1.5em;
-    }
-    
-    .main-design h3 {
-        font-size: 1em;
-    }
-    
-    .main-design h4 {
-        font-size: 0.75em;
-    }
-    
-    .answer {
-        height: 4em;
-    }
-    
-    .joker-button {
-        width: 75px;
-    }
-}
+ 
+ @media all and (max-width: 840px) {
+     .question-box {
+         height: 30%;
+     }
+     .answer-box {
+         height: 70%;
+     }
+     .main-design h1 {
+         font-size: 2em;
+     }
+     .main-design h3 {
+         font-size: 1.25em;
+     }
+     .main-design h4 {
+         font-size: 0.75em;
+     }
+     .multiplayer-names {
+         width: 70%;
+         margin-left: 15%;
+     }
+ }
+ 
+ @media all and (max-width: 768px) {
+     .question-box {
+         height: 25%;
+     }
+     .answer-box {
+         height: 75%;
+     }
+     .main-design h1 {
+         font-size: 1.5em;
+     }
+     .main-design h3 {
+         font-size: 1em;
+     }
+     .main-design h4 {
+         font-size: 0.75em;
+     }
+     .answer {
+         height: 4em;
+     }
+     .joker-button {
+         width: 75px;
+     }
+     .multiplayer-names {
+         width: 70%;
+         margin-left: 15%;
+     }
+ }
 }
 @media all and (max-width: 600px) {
     .question-box {
         height: 20%;
     }
+    
     .answer-box {
         height: 80%;
     }
+    
     .main-design h1 {
         font-size: 1em;
     }
+    
     .main-design h3 {
         font-size: 0.9em;
     }
+    
     .main-design h4 {
         font-size: 0.75em;
     }
+    
     .joker-button {
         width: 75px;
     }
-}
+    
+    .multiplayer-names {
+        width: 80%;
+        margin-left: 10%;
+    }
 }
