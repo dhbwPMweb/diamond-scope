@@ -676,7 +676,7 @@ var DiamondScope = (function () {
                     
                 } else {
                     
-                    $(this).html('Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen');
+                    $(this).html('<h1>Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen</h1>');
                     $(this).off('click');
                     
                 }
@@ -739,6 +739,7 @@ var DiamondScope = (function () {
             };
 
             var question = getQuestion(difficulty);
+            var scrambledAnswers = [0,1,2,3];
 
             var j, i, temp, x = 0;
             for (i = 0; i < 4; i++) {
@@ -750,6 +751,9 @@ var DiamondScope = (function () {
                 temp = question.answers[i];
                 question.answers[i] = question.answers[j];
                 question.answers[j] = temp;
+                temp = scrambledAnswers[i];
+                scrambledAnswers[i] = scrambledAnswers[j];
+                scrambledAnswers[j] = temp;
             }
 
             //Difficulty
@@ -769,7 +773,50 @@ var DiamondScope = (function () {
             $('.joker-button').removeClass('disabled');
             if (game.players[game.currentPlayer].joker.audience == 0) $('#joker-audience').addClass('disabled');
             if (game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
-
+            
+            //Voice
+            var audio = $('audio').get(0);
+            var $audio = $('audio');
+            var voicePath = 'assets/voices/voice';
+            var fileType = '.mp3';
+            
+            $audio.attr('src', voicePath + question.id + '-q' + fileType);
+            audio.addEventListener('ended', function() {
+                $audio.attr('src', voicePath + '-answer-a' + fileType);
+                audio.addEventListener('ended', function() {
+                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[0] + fileType);
+                    audio.addEventListener('ended', function() {
+                        $audio.attr('src', voicePath + '-answer-b' + fileType);
+                        audio.addEventListener('ended', function() {
+                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[1] + fileType);
+                            audio.addEventListener('ended', function() {
+                                $audio.attr('src', voicePath + '-answer-c' + fileType);
+                                audio.addEventListener('ended', function() {
+                                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[2] + fileType);
+                                    audio.addEventListener('ended', function() {
+                                        $audio.attr('src', voicePath + '-answer-d' + fileType);
+                                        audio.addEventListener('ended', function() {
+                                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[3] + fileType);
+                                            audio.addEventListener('ended', function() {
+                                                audio.pause();
+                                            });
+                                            audio.play();
+                                        });
+                                        audio.play();
+                                    });
+                                    audio.play();
+                                });
+                                audio.play();
+                            });
+                            audio.play();
+                        });
+                        audio.play();
+                    });
+                    audio.play();
+                });
+                audio.play();
+            });
+            audio.play();
         };
 
         var endView = function () {
