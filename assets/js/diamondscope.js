@@ -193,7 +193,7 @@ var DiamondScope = (function () {
             } else if (obj.gameMode == 0) {
                 
                 player = obj.players[0];
-                player.questinCount--;
+                player.questionCount--;
                 
                 content = "<h1>Du hast " + player.questionCount + " von " + QUESTIONS_PER_ROUND + " Fragen richtig beantwortet!</h1>";
                 
@@ -213,6 +213,8 @@ var DiamondScope = (function () {
         end: function() {
             
             content = "";
+            
+            this.round++;
             
             if(game.gameMode == 0){
                 
@@ -660,7 +662,7 @@ var DiamondScope = (function () {
             
             $('#new-game-button').on('click', function () {
                 
-                if(game.round++ < ROUND_LIMIT){
+                if((game.round + 1) < ROUND_LIMIT){
                     
                     game.questions.forEach( function(e){
                         e.used = false; 
@@ -674,7 +676,7 @@ var DiamondScope = (function () {
                     
                 } else {
                     
-                    $(this).html('Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen');
+                    $(this).html('<h1>Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen</h1>');
                     $(this).off('click');
                     
                 }
@@ -715,6 +717,7 @@ var DiamondScope = (function () {
             $('#content-div').html(content);
             
             $('#menu-button').on('click', function(){
+                game = new Game(questionArray);
                 startMenu();
             });
 
@@ -741,6 +744,7 @@ var DiamondScope = (function () {
             var j, i, temp, x = 0;
             for (i = 0; i < 4; i++) {
                 j = Math.floor(Math.random() * (i + 1));
+                console.log(j);
                 if (j == x) {
                     question.rightAnswer = i;
                     x = i;
