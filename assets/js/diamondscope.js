@@ -193,7 +193,7 @@ var DiamondScope = (function () {
             } else if (obj.gameMode == 0) {
                 
                 player = obj.players[0];
-                player.questinCount--;
+                player.questionCount--;
                 
                 content = "<h1>Du hast " + player.questionCount + " von " + QUESTIONS_PER_ROUND + " Fragen richtig beantwortet!</h1>";
                 
@@ -213,6 +213,8 @@ var DiamondScope = (function () {
         end: function() {
             
             content = "";
+            
+            this.round++;
             
             if(game.gameMode == 0){
                 
@@ -715,6 +717,7 @@ var DiamondScope = (function () {
             $('#content-div').html(content);
             
             $('#menu-button').on('click', function(){
+                game = new Game(questionArray);
                 startMenu();
             });
 
