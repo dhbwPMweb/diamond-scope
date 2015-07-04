@@ -57,8 +57,8 @@ var DiamondScope = (function () {
         this.players = [];
         this.gameMode = undefined;
         this.ranking = {
-            rounds: undefined,
-            points: undefined
+            rounds: {},
+            points: {}
         };
         this.questions = questionArray;
 
@@ -69,7 +69,6 @@ var DiamondScope = (function () {
         this.questionID = 0;
         this.currentPlayer = 0;
         this.expulsedPlayers = undefined;
-        this.change = false;
     };
 
     Game.prototype = {
@@ -146,27 +145,107 @@ var DiamondScope = (function () {
             this.currentPlayer++;
             if (this.currentPlayer == this.players.length) {
                 this.currentPlayer = 0;
-                this.change = true;
+//                this.change = true;
             }
 
             while (this.expulsedPlayers[this.currentPlayer]) {
 
-                this.change = false;
+//                this.change = false;
                 this.currentPlayer++;
                 if (this.currentPlayer == this.players.length) {
                     this.currentPlayer = 0;
-                    this.change = true;
+//                    this.change = true;
                 }
 
             }
 
+        },
+        
+        conclude: function () {
+            
+            obj = this;
+            
+            if (obj.gameMode == 1) {
+                obj.players.sort(function (a, b) {
+                   return b.questionCount - a.questionCount;
+                });
+                
+                if(obj.ranking.rounds[obj.players[0].id] === undefined) game.ranking.rounds[game.players[0].id] = 0;
+                obj.ranking.rounds[obj.players[0].id]++;
+                
+                content = '<h1>Herzlichen Glückwunsch ' + obj.players[0].name + '</h1>';
+                
+                obj.players.forEach( function(e, i){
+                    
+                    e.questionCount--;
+                    
+                    if(obj.ranking.points[e.id] === undefined) obj.ranking.points[e.id] = 0;
+                    obj.ranking.points[e.id] += e.questionCount;
+                    
+                    content += '<h1>' + (i + 1) + '. ' + e.name + ' mit ' + e.questionCount + ' Punkten</h1>';
+                    e.questionCount = 0;
+                    
+                    e.joker.audience = 1;
+                    e.joker.fifty = 1;
+                    
+                });
+                
+            } else if (obj.gameMode == 0) {
+                
+                player = obj.players[0];
+                player.questinCount--;
+                
+                content = "<h1>Du hast " + player.questionCount + " von " + QUESTIONS_PER_ROUND + " Fragen richtig beantwortet!</h1>";
+                
+                if(obj.ranking.points[0] === undefined) obj.ranking.points[0] = 0;
+                obj.ranking.points[0] += player.questionCount;
+                
+                player.questionCount = 0;
+                player.joker.audience = 1;
+                player.joker.fifty = 1;
+                
+            }
+            
+            return content;
+            
+        },
+        
+        end: function() {
+            
+            content = "";
+            
+            if(game.gameMode == 0){
+                
+                content += '<h1>Du hast ' + this.round + ' Runden gespielt und dabei ' + obj.ranking.points[0] + ' Punkte erreicht</h1>';
+                
+            } else if(game.gameMode == 1){
+                
+                obj = this;
+                
+                game.players.sort(function(a, b) {
+                    
+                    obj.ranking.points[b.id] - obj.ranking.points[a.id];
+                    
+                });
+                
+                game.players.forEach(function(e, i) {
+                    
+                    if(obj.ranking.rounds[e.id] === undefined) obj.ranking.rounds[e.id] = 0;
+                   
+                    content += '<h1>' + (i + 1) + '. ' + e.name + ' mit ' + obj.ranking.points[e.id] + ' Punkten und ' + obj.ranking.rounds[e.id] + ' gewonnenen Runden</h1>';
+                    
+                });
+                
+            }
+            
+            return content;
+            
         },
 
     };
 
     var questionArray = [];
     var currentQuestion;
-    var currentDifficulty;
     //var game;
 
     var init = function () {
@@ -200,6 +279,7 @@ var DiamondScope = (function () {
                 if (!e) {
                     char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
                     $('#answer-' + char).html('');
+                    $('#answer-' + char).parent().addClass('disabled');
                 }
             });
 
@@ -218,24 +298,27 @@ var DiamondScope = (function () {
         });
 
         $(document).on('click', '.answer', function () {
-            id = $(this).data('id');
-            if (id == currentQuestion.rightAnswer) {
-                $(this).addClass('green');
-                setTimeout(function () {
-
-                    if (game.gameMode == 1) game.nextPlayer();
-
-                    nextQuestion();
-                }, 1500);
-            } else {
-                $(this).addClass('red');
-                $('.answer').each(function () {
-                    if ($(this).data('id') == currentQuestion.rightAnswer)
-                        $(this).addClass('yellow');
-                });
-                setTimeout(function () {
-                    expulsePlayer();
-                }, 1500);
+            if(!($(this).hasClass('disabled'))){
+                $('.answer').addClass('disabled');
+                id = $(this).data('id');
+                if (id == currentQuestion.rightAnswer) {
+                    $(this).addClass('green');
+                    setTimeout(function () {
+    
+                        if (game.gameMode == 1) game.nextPlayer();
+    
+                        nextQuestion();
+                    }, 1500);
+                } else {
+                    $(this).addClass('red');
+                    $('.answer').each(function () {
+                        if ($(this).data('id') == currentQuestion.rightAnswer)
+                            $(this).addClass('yellow');
+                    });
+                    setTimeout(function () {
+                        expulsePlayer();
+                    }, 1500);
+                }
             }
         });
 
@@ -278,24 +361,17 @@ var DiamondScope = (function () {
     };
 
     var nextQuestion = function () {
-
-        if (game.gameMode == 0) { // 0 -> Singleplayer
-
-            difficulty = Math.floor((game.round++) / 3);
-            game.questionID++;
+        
+        difficulty = Math.floor((game.players[game.currentPlayer].questionCount++) / 3);
+        
+        if(game.players[game.currentPlayer].questionCount < QUESTIONS_PER_ROUND) {
+            
             draw.frage(difficulty);
-
-        } else if (game.gameMode == 1) { // 1 -> Multiplayer
-
-            difficulty = Math.floor((game.round) / 3);
-            if (game.change) {
-                game.questionID++;
-                difficulty = Math.floor((game.round++) / 3);
-                game.change = false;
-            }
-
-            draw.frage(difficulty);
-
+            
+        } else {
+            
+            draw.endView(); 
+            
         }
 
     };
@@ -555,31 +631,92 @@ var DiamondScope = (function () {
         var endScreen = function () {
 
             content = '<div class="container-fluid question-box">' +
-                '<div class="row">' +
-                '<div>' +
-                '<div class="col-xs-5 pull-left">' +
-                '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
-                '</div>' +
-                '<div class="main-design" id="player">' +
-                '<h4>Spieler X</h4>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="vertical-center-2" data-container="#main-center"><div class="row">' +
-                '<div class="col-xs-12 main-design">' +
-                '<h1 id="question">Gl&uuml;ckwunsch Bernd! Sie haben 4 von 15 Fragen richtig beantwortet!</h1>' +
-                '<h1 id="question">1. Bernd - 4/15 Fragen</h1>' +
-                '<h1 id="question">2. Dieter - 3/15 Fragen</h1>' +
-                '<h1 id="question">3. Tom B. - 0/15 Fragen</h1>' +
-                '</div>' +
-                '</div>' +
-                '<div class="menu-button col-centered rounded-div main-design btn" id="singleplayer-button">' +
-                '<h1>Neues Spiel</h1>' +
-                '</div></div>' +
-                '</div>';
+                         '<div class="row">' +
+                            '<div>' +
+                                '<div class="col-xs-5 pull-left">' +
+                                    '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
+                                '</div>' +
+                            '</div>' +
+                         '</div>' +
+                        '</div>' +
+                        '<div class="vertical-center-2" data-container="#main-center">' +
+                            '<div class="row">' +
+                                '<div class="col-xs-12 main-design">';
+            
+            content += game.conclude();
+            
+            content +=          '</div>' +
+                            '</div>' +
+                            '<div class="menu-button rounded-div main-design btn" id="new-game-button">' +
+                                '<h1>Neues Spiel</h1>' +
+                            '</div>' +
+                            '<div class="menu-button rounded-div main-design btn" id="report-button">' +
+                                '<h1>Zur Auswertung</h1>' +
+                            '</div>' +
+                        '</div>' +
+                        '</div>';
 
             $('#content-div').html(content);
+            
+            $('#new-game-button').on('click', function () {
+                
+                if(game.round++ < ROUND_LIMIT){
+                    
+                    game.questions.forEach( function(e){
+                        e.used = false; 
+                    });
+                    
+                    game.expulsedPlayers = {};
+                    changeScreen(questionScreen);
+                    setTimeout(function () {
+                        nextQuestion();
+                    }, 501);
+                    
+                } else {
+                    
+                    $(this).html('Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen');
+                    $(this).off('click');
+                    
+                }
+                
+            });
+            
+            $('#report-button').on('click', function(){
+                reportScreen();
+            });
+
+        };
+
+        var reportScreen = function () {
+
+            content = '<div class="container-fluid question-box">' +
+                         '<div class="row">' +
+                            '<div>' +
+                                '<div class="col-xs-5 pull-left">' +
+                                    '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
+                                '</div>' +
+                            '</div>' +
+                         '</div>' +
+                        '</div>' +
+                        '<div class="vertical-center-2" data-container="#main-center">' +
+                            '<div class="row">' +
+                                '<div class="col-xs-12 main-design">';
+            
+            content += game.end();
+            
+            content +=          '</div>' +
+                            '</div>' +
+                            '<div class="menu-button rounded-div main-design btn" id="menu-button">' +
+                                '<h1>Zum Hauptmenu</h1>' +
+                            '</div>' +
+                        '</div>' +
+                        '</div>';
+
+            $('#content-div').html(content);
+            
+            $('#menu-button').on('click', function(){
+                startMenu();
+            });
 
         };
 
@@ -588,7 +725,7 @@ var DiamondScope = (function () {
             function getQuestion(difficulty) {
 
                 selectedQuestions = $.grep(game.questions, function (e, i) {
-                    return ((e.difficulty == difficulty) && !e.used);
+                    return ((e.difficulty == difficulty) && (e.used == false));
                 });
 
                 currentQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
@@ -614,8 +751,8 @@ var DiamondScope = (function () {
 
             //Difficulty
             category = " (Kategorie: " + (difficulty + 1) + ")";
-            player = "Spieler " + (game.currentPlayer + 1) + " - " + game.players[game.currentPlayer].name;
-            $('#current-question > h3').html('Frage ' + game.questionID + category);
+            player = "Spieler " + (game.players[game.currentPlayer].id + 1) + " - " + game.players[game.currentPlayer].name;
+            $('#current-question > h3').html('Frage ' + game.players[game.currentPlayer].questionCount + category);
             $('#player > h4').html(player);
             $('#question').html(question.question);
             $('#answer-a').html(question.answers[0]);
@@ -625,6 +762,7 @@ var DiamondScope = (function () {
             $('.answer').removeClass('red');
             $('.answer').removeClass('green');
             $('.answer').removeClass('yellow');
+            $('.answer').removeClass('disabled');
             $('.joker-button').removeClass('disabled');
             if (game.players[game.currentPlayer].joker.audience == 0) $('#joker-audience').addClass('disabled');
             if (game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
@@ -632,7 +770,6 @@ var DiamondScope = (function () {
         };
 
         var endView = function () {
-            //game = new Game(questionArray);
             changeScreen(endScreen);
         };
 
