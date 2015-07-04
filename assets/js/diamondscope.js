@@ -662,7 +662,7 @@ var DiamondScope = (function () {
             
             $('#new-game-button').on('click', function () {
                 
-                if((game.round + 1) < ROUND_LIMIT){
+                if(game.round++ < ROUND_LIMIT){
                     
                     game.questions.forEach( function(e){
                         e.used = false; 
@@ -676,7 +676,7 @@ var DiamondScope = (function () {
                     
                 } else {
                     
-                    $(this).html('<h1>Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen</h1>');
+                    $(this).html('Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen');
                     $(this).off('click');
                     
                 }
@@ -743,7 +743,6 @@ var DiamondScope = (function () {
             var j, i, temp, x = 0;
             for (i = 0; i < 4; i++) {
                 j = Math.floor(Math.random() * (i + 1));
-                console.log(j);
                 if (j == x) {
                     question.rightAnswer = i;
                     x = i;
