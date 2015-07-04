@@ -310,6 +310,7 @@ var DiamondScope = (function () {
                         if (game.gameMode == 1) game.nextPlayer();
     
                         nextQuestion();
+                        
                     }, 1500);
                 } else {
                     $(this).addClass('red');
@@ -650,7 +651,7 @@ var DiamondScope = (function () {
             content +=          '</div>' +
                             '</div>' +
                             '<div class="menu-button rounded-div main-design btn" id="new-game-button">' +
-                                '<h1>Neues Spiel</h1>' +
+                                '<h1>Neue Runde</h1>' +
                             '</div>' +
                             '<div class="menu-button rounded-div main-design btn" id="report-button">' +
                                 '<h1>Zur Auswertung</h1>' +
@@ -741,7 +742,7 @@ var DiamondScope = (function () {
             var question = getQuestion(difficulty);
             var scrambledAnswers = [0,1,2,3];
 
-            var j, i, temp, x = 0;
+            var j, i, temp, x = question.rightAnswer;
             for (i = 0; i < 4; i++) {
                 j = Math.floor(Math.random() * (i + 1));
                 if (j == x) {
