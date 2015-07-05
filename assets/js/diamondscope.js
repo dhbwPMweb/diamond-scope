@@ -61,11 +61,6 @@ var DiamondScope = (function () {
             points: {}
         };
         this.questions = questionArray;
-
-        this.questions.forEach(function (e) {
-            e.used = false;
-        });
-
         this.questionID = 0;
         this.currentPlayer = 0;
         this.expulsedPlayers = undefined;
@@ -170,7 +165,7 @@ var DiamondScope = (function () {
                    return b.questionCount - a.questionCount;
                 });
                 
-                if(obj.ranking.rounds[obj.players[0].id] === undefined) game.ranking.rounds[game.players[0].id] = 0;
+                if(obj.ranking.rounds[obj.players[0].id] == undefined) game.ranking.rounds[game.players[0].id] = 0;
                 obj.ranking.rounds[obj.players[0].id]++;
                 
                 content = '<h1>Herzlichen Glückwunsch ' + obj.players[0].name + '</h1>';
@@ -197,7 +192,7 @@ var DiamondScope = (function () {
                 
                 content = "<h1>Du hast " + player.questionCount + " von " + QUESTIONS_PER_ROUND + " Fragen richtig beantwortet!</h1>";
                 
-                if(obj.ranking.points[0] === undefined) obj.ranking.points[0] = 0;
+                if(obj.ranking.points[0] == undefined) obj.ranking.points[0] = 0;
                 obj.ranking.points[0] += player.questionCount;
                 
                 player.questionCount = 0;
@@ -367,7 +362,7 @@ var DiamondScope = (function () {
         
         difficulty = Math.floor((game.players[game.currentPlayer].questionCount++) / 3);
         
-        if(game.players[game.currentPlayer].questionCount < QUESTIONS_PER_ROUND) {
+        if(game.players[game.currentPlayer].questionCount <= QUESTIONS_PER_ROUND) {
             
             draw.frage(difficulty);
             
@@ -741,13 +736,17 @@ var DiamondScope = (function () {
 
             var question = getQuestion(difficulty);
             var scrambledAnswers = [0,1,2,3];
-
-            var j, i, temp, x = question.rightAnswer;
+            
+            var j, i, temp;
+            var x = question.rightAnswer;
             for (i = 0; i < 4; i++) {
                 j = Math.floor(Math.random() * (i + 1));
                 if (j == x) {
                     question.rightAnswer = i;
                     x = i;
+                } else if(i == x){
+                    question.rightAnswer = j;
+                    x = j;
                 }
                 temp = question.answers[i];
                 question.answers[i] = question.answers[j];
