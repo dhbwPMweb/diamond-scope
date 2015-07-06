@@ -321,6 +321,19 @@ var DiamondScope = (function () {
     };
 
     var sizeCheck = function () {
+        if($(window).width()<1200) {
+            $('body > .container-fluid').css('height', '0');
+            $('body > #main-center.container-fluid').css({'height': '99%'});
+            $('#main-card').css('margin', '0');
+            $('#video-background, #video-background-inner').attr('src', '');
+            
+        } else {
+            $('body > .container-fluid').css('height', '15%');
+            $('body > #main-center.container-fluid').css({'height': '70%'});
+            $('#main-card').css('margin', '5px');
+            $('#video-background').attr('src', 'assets/videos/QuzzeldullBackgroundLoopCompressed.mp4');
+            $('#video-background-inner').attr('src', 'assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4');
+        }
         if (($(window).outerHeight()) / 9 > ($(window).outerWidth()) / 16) {
             $('body > #video-background').css({
                 'width': 'auto',
