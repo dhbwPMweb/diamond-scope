@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <style id="audience"></style>
     <div id="loading">
         <h1>Lade Daten, bitte warten...</h1>
     </div>
@@ -32,7 +33,7 @@
         <div class="col-lg-2"></div>
         <div id="main-card" class="col-lg-8 panel rounded-div">
             <video id="video-background-inner" src="assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4" type="video/mp4" autoplay loop style="background-image:url('assets/images/background-blur.png'); background-size: cover; background-position: center;"></video>
-            <div id="content-div">
+            <div id="content-div" data-container="#main-card">
             </div>
         </div>
     </div>

@@ -280,11 +280,13 @@ var DiamondScope = (function () {
         $(document).on('click', '#joker-audience', function () {
 
             $(this).addClass('disabled');
-
+           
+            $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
+            
             answers = game.players[game.currentPlayer].useJoker(1);
             answers.forEach(function (e, i) {
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
-                $('#answer-' + char).html(answers[i] + '%');
+                $('#audience').append('#tag-' + char + ':after{height:' + (30 + e) + '%;content:"' + e + '%";}');
             });
 
         });
@@ -317,15 +319,26 @@ var DiamondScope = (function () {
 
     };
 
+    var verticalAlign = function () {
+         //Vertical align
+        $(".vertical-center").each(function () {
+            $(this).css("margin-top", ($($(this).data("container")).outerHeight() / 2) - ($(this).outerHeight()));
+        });
+
+        $(".vertical-center-2").each(function () {
+            $(this).css("margin-top", ($($(this).data("container")).outerHeight() / 2) - ($(this).outerHeight() / 2));
+        });  
+    };
+    
     var sizeCheck = function () {
         if(widthBefore==-1) {
             widthBefore = ($(window).width()<1200) ? 1400 : 1000;
         }
-        console.log(widthBefore);
+        
         if($(window).width()<1200 && widthBefore >= 1200) {
             $('body > .container-fluid').css('height', '0');
             $('body > #main-center.container-fluid').css({'height': '99%'});
-            $('#main-card').css('margin', '0');
+            $('#main-card').css('margin', '0.5%');
             $('#video-background, #video-background-inner').attr('src', '');
             $('#video-background-inner').css({'left': '0', 'top': '0', 'width': '100%'});
 
@@ -358,15 +371,9 @@ var DiamondScope = (function () {
                 'height': 'auto'
             })
         }
-
-        //Vertical align
-        $(".vertical-center").each(function () {
-            $(this).css("margin-top", ($($(this).attr("data-container")).outerHeight() / 2) - ($(this).outerHeight()));
-        });
-
-        $(".vertical-center-2").each(function () {
-            $(this).css("margin-top", ($($(this).attr("data-container")).outerHeight() / 2) - ($(this).outerHeight() / 2));
-        });
+        
+        verticalAlign();
+        
     };
 
     var initializeGame = function () {
@@ -612,28 +619,28 @@ var DiamondScope = (function () {
                 '<div class="container-fluid answer-box">' +
                 '<div class="container-fluid">' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="0">' +
-                '<h4 class="pull-left">A</h4>' +
-                '<h4 id="answer-a">Duke1</h4>' +
+                '<h4 id="tag-a" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=0]">A</h4>' +
+                '<h4 id="answer-a" class="vertical-center-2" data-container=".answer[data-id=0]">Duke1</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="1">' +
-                '<h4 class="pull-left">B</h4>' +
-                '<h4 id="answer-b">Prince2</h4>' +
+                '<h4 id="tag-b" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=1]">B</h4>' +
+                '<h4 id="answer-b" class="vertical-center-2" data-container=".answer[data-id=1]">Prince2</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="2">' +
-                '<h4 class="pull-left">C</h4>' +
-                '<h4 id="answer-c">King4</h4>' +
+                '<h4 id="tag-c" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=2]">C</h4>' +
+                '<h4 id="answer-c" class="vertical-center-2" data-container=".answer[data-id=2]">King4</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="3">' +
-                '<h4 class="pull-left">D</h4>' +
-                '<h4 id="answer-d">Queen3</h4>' +
+                '<h4 id="tag-d" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=3]">D</h4>' +
+                '<h4 id="answer-d" class="vertical-center-2" data-container=".answer[data-id=3]">Queen3</h4>' +
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
                 '<div class="col-lg-2 pull-right rounded-div joker-button main-design" id="joker-audience">' +
-                '<h4>Publikum</h4>' +
+                '<h4 class="vertical-center-2" data-container="#joker-audience">Publikum</h4>' +
                 '</div>' +
                 '<div class="col-lg-2 pull-right rounded-div joker-button main-design" id="joker-fifty">' +
-                '<h4>2 Aus 4</h4>' +
+                '<h4 class="vertical-center-2" data-container="#joker-fifty">50:50</h4>' +
                 '</div>' +
                 '</div>' +
                 '</div>';
@@ -789,50 +796,53 @@ var DiamondScope = (function () {
             $('.joker-button').removeClass('disabled');
             if (game.players[game.currentPlayer].joker.audience == 0) $('#joker-audience').addClass('disabled');
             if (game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
+            $('#audience').html('.audience:after{opacity:0;}.audience{opacity:1;}');
+            
+            verticalAlign();
             
             //Voice
-            var audio = $('audio').get(0);
-            var $audio = $('audio');
-            var voicePath = 'assets/voices/voice';
-            var fileType = '.mp3';
-            
-            $audio.attr('src', voicePath + question.id + '-q' + fileType);
-            audio.addEventListener('ended', function() {
-                $audio.attr('src', voicePath + '-answer-a' + fileType);
-                audio.addEventListener('ended', function() {
-                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[0] + fileType);
-                    audio.addEventListener('ended', function() {
-                        $audio.attr('src', voicePath + '-answer-b' + fileType);
-                        audio.addEventListener('ended', function() {
-                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[1] + fileType);
-                            audio.addEventListener('ended', function() {
-                                $audio.attr('src', voicePath + '-answer-c' + fileType);
-                                audio.addEventListener('ended', function() {
-                                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[2] + fileType);
-                                    audio.addEventListener('ended', function() {
-                                        $audio.attr('src', voicePath + '-answer-d' + fileType);
-                                        audio.addEventListener('ended', function() {
-                                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[3] + fileType);
-                                            audio.addEventListener('ended', function() {
-                                                audio.pause();
-                                            });
-                                            audio.play();
-                                        });
-                                        audio.play();
-                                    });
-                                    audio.play();
-                                });
-                                audio.play();
-                            });
-                            audio.play();
-                        });
-                        audio.play();
-                    });
-                    audio.play();
-                });
-                audio.play();
-            });
-            audio.play();
+//            var audio = $('audio').get(0);
+//            var $audio = $('audio');
+//            var voicePath = 'assets/voices/voice';
+//            var fileType = '.mp3';
+//            
+//            $audio.attr('src', voicePath + question.id + '-q' + fileType);
+//            audio.addEventListener('ended', function() {
+//                $audio.attr('src', voicePath + '-answer-a' + fileType);
+//                audio.addEventListener('ended', function() {
+//                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[0] + fileType);
+//                    audio.addEventListener('ended', function() {
+//                        $audio.attr('src', voicePath + '-answer-b' + fileType);
+//                        audio.addEventListener('ended', function() {
+//                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[1] + fileType);
+//                            audio.addEventListener('ended', function() {
+//                                $audio.attr('src', voicePath + '-answer-c' + fileType);
+//                                audio.addEventListener('ended', function() {
+//                                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[2] + fileType);
+//                                    audio.addEventListener('ended', function() {
+//                                        $audio.attr('src', voicePath + '-answer-d' + fileType);
+//                                        audio.addEventListener('ended', function() {
+//                                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[3] + fileType);
+//                                            audio.addEventListener('ended', function() {
+//                                                audio.pause();
+//                                            });
+//                                            audio.play();
+//                                        });
+//                                        audio.play();
+//                                    });
+//                                    audio.play();
+//                                });
+//                                audio.play();
+//                            });
+//                            audio.play();
+//                        });
+//                        audio.play();
+//                    });
+//                    audio.play();
+//                });
+//                audio.play();
+//            });
+//            audio.play();
         };
 
         var endView = function () {
