@@ -1,5 +1,7 @@
 var game;
 
+var prediff = -1;
+
 var DiamondScope = (function () {
 
     var Question = function (question, answers, rightAnswer, difficulty, id) {
@@ -270,6 +272,7 @@ var DiamondScope = (function () {
 
         $(window).load(function () {
             sizeCheck();
+            $('audio#background').get(0).volume = 0.05;
         });
 
         $(document).on('click', '#joker-fifty', function () {
@@ -304,6 +307,12 @@ var DiamondScope = (function () {
                 $('.answer').addClass('disabled');
                 id = $(this).data('id');
                 if (id == currentQuestion.rightAnswer) {
+                    //Sound
+                    
+                    $('audio#event').attr('src', 'assets/sounds/Frage_Richtig.mp3');
+                    $('audio#event').get(0).play();
+                    
+                    //End of Sound
                     $(this).addClass('green');
                     setTimeout(function () {
     
@@ -312,6 +321,14 @@ var DiamondScope = (function () {
                         nextQuestion();
                     }, 1500);
                 } else {
+                    //Sound
+                    
+                    $('audio#event').attr('src', 'assets/sounds/Frage_Falsch.mp3');
+                    $('audio#event').get(0).play();
+                    $('audio#background').get(0).pause();
+                    $('audio#voice').get(0).pause();
+                    
+                    //End of Sound
                     $(this).addClass('red');
                     $('.answer').each(function () {
                         if ($(this).data('id') == currentQuestion.rightAnswer)
@@ -439,6 +456,18 @@ var DiamondScope = (function () {
                 $(this).off('click');
                 changeScreen(multiPlayer);
             });
+            
+            //Sound
+            
+            $('audio#background').removeAttr('loop');
+            $('audio#background').attr('src', 'assets/sounds/Start_Musik.mp3');
+            $('audio#background').get(0).addEventListener('ended', function startAudio() {
+                $('audio#background').attr('src', 'assets/sounds/Start_Musik_Loop.mp3');
+                $('audio#background').attr('loop', 'loop');
+                $('audio#background').get(0).play();
+                $('audio#background').get(0).removeEventListener('ended', startAudio);
+            });
+            $('audio#background').get(0).play();
 
         };
 
@@ -734,7 +763,7 @@ var DiamondScope = (function () {
                 currentQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
 
                 currentQuestion.used = true;
-
+                
                 return currentQuestion;
             };
 
@@ -776,30 +805,43 @@ var DiamondScope = (function () {
             if (game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
             
             //Voice
-            var audio = $('audio').get(0);
-            var $audio = $('audio');
-            var voicePath = 'assets/voices/voice';
-            var fileType = '.mp3';
-            
-            $audio.attr('src', voicePath + question.id + '-q' + fileType);
-            audio.addEventListener('ended', function() {
-                $audio.attr('src', voicePath + '-answer-a' + fileType);
-                audio.addEventListener('ended', function() {
-                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[0] + fileType);
-                    audio.addEventListener('ended', function() {
-                        $audio.attr('src', voicePath + '-answer-b' + fileType);
-                        audio.addEventListener('ended', function() {
-                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[1] + fileType);
-                            audio.addEventListener('ended', function() {
-                                $audio.attr('src', voicePath + '-answer-c' + fileType);
-                                audio.addEventListener('ended', function() {
-                                    $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[2] + fileType);
-                                    audio.addEventListener('ended', function() {
-                                        $audio.attr('src', voicePath + '-answer-d' + fileType);
-                                        audio.addEventListener('ended', function() {
-                                            $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[3] + fileType);
-                                            audio.addEventListener('ended', function() {
-                                                audio.pause();
+            var playVoice = function() {
+                var audio = $('audio#voice').get(0);
+                var $audio = $('audio#voice');
+                var voicePath = 'assets/voices/voice';
+                var fileType = '.mp3';
+
+                $audio.attr('src', voicePath + question.id + '-q' + fileType);
+                audio.addEventListener('ended', function audioQ() {
+                    console.log('test');
+                    $audio.attr('src', voicePath + '-answer-a' + fileType);
+                    audio.removeEventListener('ended', audioQ);
+                    audio.addEventListener('ended', function audioA() {
+                        $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[0] + fileType);
+                        audio.removeEventListener('ended', audioA);
+                        audio.addEventListener('ended', function audioZero() {
+                            $audio.attr('src', voicePath + '-answer-b' + fileType);
+                            audio.removeEventListener('ended', audioZero);
+                            audio.addEventListener('ended', function audioB() {
+                                $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[1] + fileType);
+                                audio.removeEventListener('ended', audioB);
+                                audio.addEventListener('ended', function audioOne() {
+                                    $audio.attr('src', voicePath + '-answer-c' + fileType);
+                                    audio.removeEventListener('ended', audioOne);
+                                    audio.addEventListener('ended', function audioC() {
+                                        $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[2] + fileType);
+                                        audio.removeEventListener('ended', audioC);
+                                        audio.addEventListener('ended', function audioTwo() {
+                                            $audio.attr('src', voicePath + '-answer-d' + fileType);
+                                            audio.removeEventListener('ended', audioTwo);
+                                            audio.addEventListener('ended', function audioD() {
+                                                $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[3] + fileType);
+                                                audio.removeEventListener('ended', audioD);
+                                                audio.addEventListener('ended', function audioThree() {
+                                                    audio.pause();
+                                                    audio.removeEventListener('ended', audioThree);
+                                                });
+                                                audio.play();
                                             });
                                             audio.play();
                                         });
@@ -816,8 +858,34 @@ var DiamondScope = (function () {
                     audio.play();
                 });
                 audio.play();
-            });
-            audio.play();
+            }
+            
+            //End of Voice
+            
+            //Sound
+            
+            if(difficulty<2) {
+                if(difficulty!=prediff) {
+                    $('audio#background').attr('src', 'assets/sounds/Frage_Stufe_' + (difficulty+1) + '.mp3');
+                    $('audio#background').attr('loop', 'loop');
+                    $('audio#background').get(0).play();
+                }
+                playVoice();
+            } else {
+                $('audio#background').removeAttr('loop');
+                $('audio#background').attr('src', 'assets/sounds/Frage_Income.mp3');
+                $('audio#background').get(0).addEventListener('ended', function startAudio() {
+                    playVoice();
+                    $('audio#background').attr('src', 'assets/sounds/Frage_Stufe_' + (difficulty+1) + '.mp3');
+                    $('audio#background').attr('loop', 'loop');
+                    $('audio#background').get(0).play();
+                    $('audio#background').get(0).removeEventListener('ended', startAudio);
+                });
+                $('audio#background').get(0).play();
+            }
+            prediff = difficulty;
+            
+            //End of Sound
         };
 
         var endView = function () {
