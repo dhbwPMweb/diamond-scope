@@ -1,5 +1,3 @@
-var game;
-
 var DiamondScope = (function () {
 
     var Question = function (question, answers, rightAnswer, difficulty, id) {
@@ -243,7 +241,7 @@ var DiamondScope = (function () {
 
     var questionArray = [];
     var currentQuestion;
-    //var game;
+    var game;
 
     var init = function () {
         sizeCheck();
@@ -442,14 +440,14 @@ var DiamondScope = (function () {
 
             content = '<div class="container-fluid vertical-center-2" data-container="#main-center">' +
                 '<div class="row" id="player-row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
                 '<h1>Spielername</h1>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
                 '<input type="text" class="main-design names" id="player-name">' +
                 '</div>' +
@@ -492,7 +490,7 @@ var DiamondScope = (function () {
 
             content = '<div class="container-fluid vertical-center-2" data-container="#main-center">' +
                 '<div class="row" id="player-row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
                 '<h1>Spielernamen</h1>' +
                 '</div>' +
@@ -573,10 +571,10 @@ var DiamondScope = (function () {
             content = '<div class="container-fluid question-box">' +
                 '<div class="row">' +
                 '<div>' +
-                '<div class="col-xs-5 pull-left">' +
+                '<div class="col-lg-5 pull-left">' +
                 '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                 '</div>' +
-                '<div class="col-xs-4 pull-right">' +
+                '<div class="col-lg-4 pull-right">' +
                 '<div class="main-design" id="current-question">' +
                 '<h3>Frage X</h3>' +
                 '</div>' +
@@ -588,7 +586,7 @@ var DiamondScope = (function () {
                 '</div>' +
                 '<div class="clearfix"></div>' +
                 '<div class="row">' +
-                '<div class="col-xs-12 main-design">' +
+                '<div class="col-lg-12 main-design">' +
                 '<h1 id="question">Wie hei&szlig;t eine gängige Projektmanagement-Methode?</h1>' +
                 '</div>' +
                 '</div>' +
@@ -613,10 +611,10 @@ var DiamondScope = (function () {
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
-                '<div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-audience">' +
+                '<div class="col-lg-2 pull-right rounded-div joker-button main-design" id="joker-audience">' +
                 '<h4>Publikum</h4>' +
                 '</div>' +
-                '<div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-fifty">' +
+                '<div class="col-lg-2 pull-right rounded-div joker-button main-design" id="joker-fifty">' +
                 '<h4>2 Aus 4</h4>' +
                 '</div>' +
                 '</div>' +
@@ -631,7 +629,7 @@ var DiamondScope = (function () {
             content = '<div class="container-fluid question-box">' +
                          '<div class="row">' +
                             '<div>' +
-                                '<div class="col-xs-5 pull-left">' +
+                                '<div class="col-lg-5 pull-left">' +
                                     '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                                 '</div>' +
                             '</div>' +
@@ -639,7 +637,7 @@ var DiamondScope = (function () {
                         '</div>' +
                         '<div class="vertical-center-2" data-container="#main-center">' +
                             '<div class="row">' +
-                                '<div class="col-xs-12 main-design">';
+                                '<div class="col-lg-12 main-design">';
             
             content += game.conclude();
             
@@ -690,7 +688,7 @@ var DiamondScope = (function () {
             content = '<div class="container-fluid question-box">' +
                          '<div class="row">' +
                             '<div>' +
-                                '<div class="col-xs-5 pull-left">' +
+                                '<div class="col-lg-5 pull-left">' +
                                     '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                                 '</div>' +
                             '</div>' +
@@ -698,7 +696,7 @@ var DiamondScope = (function () {
                         '</div>' +
                         '<div class="vertical-center-2" data-container="#main-center">' +
                             '<div class="row">' +
-                                '<div class="col-xs-12 main-design">';
+                                '<div class="col-lg-12 main-design">';
             
             content += game.end();
             
