@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="assets/css/style.css" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="assets/js/define.js"></script>
@@ -23,23 +23,17 @@
 </head>
 
 <body>
+    <style id="audience"></style>
     <div id="loading">
         <h1>Lade Daten, bitte warten...</h1>
     </div>
-    <video id="video-background" autoplay loop style="background-image:url('assets/images/background-blur.png');">
-        <source src="assets/videos/QuzzeldullBackgroundLoopCompressed.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-    </video>
+    <video id="video-background" src="assets/videos/QuzzeldullBackgroundLoopCompressed.mp4" type="video/mp4" autoplay loop style="background-image:url('assets/images/background-blur.png'); background-size: cover; background-position: center;"></video>
     <div class="container-fluid md-hidden"></div>
     <div id="main-center" class="container-fluid">
-        <div class="col-xs-2"></div>
-        <div id="main-card" class="col-xs-8 panel rounded-div">
-            <video id="video-background-inner" autoplay loop  style="background-image:url('assets/images/background-blur.png');">
-                <source src="assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-            </video>
-
-            <div id="content-div">
+        <div class="col-lg-2"></div>
+        <div id="main-card" class="col-lg-8 panel rounded-div">
+            <video id="video-background-inner" src="assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4" type="video/mp4" autoplay loop style="background-image:url('assets/images/background-blur.png'); background-size: cover; background-position: center;"></video>
+            <div id="content-div" data-container="#main-card">
             </div>
         </div>
     </div>

@@ -1,7 +1,3 @@
-var game;
-
-var prediff = -1;
-
 var DiamondScope = (function () {
 
     var Question = function (question, answers, rightAnswer, difficulty, id) {
@@ -63,11 +59,6 @@ var DiamondScope = (function () {
             points: {}
         };
         this.questions = questionArray;
-
-        this.questions.forEach(function (e) {
-            e.used = false;
-        });
-
         this.questionID = 0;
         this.currentPlayer = 0;
         this.expulsedPlayers = undefined;
@@ -172,7 +163,7 @@ var DiamondScope = (function () {
                    return b.questionCount - a.questionCount;
                 });
                 
-                if(obj.ranking.rounds[obj.players[0].id] === undefined) game.ranking.rounds[game.players[0].id] = 0;
+                if(obj.ranking.rounds[obj.players[0].id] == undefined) game.ranking.rounds[game.players[0].id] = 0;
                 obj.ranking.rounds[obj.players[0].id]++;
                 
                 content = '<h1>Herzlichen Glückwunsch ' + obj.players[0].name + '</h1>';
@@ -199,7 +190,7 @@ var DiamondScope = (function () {
                 
                 content = "<h1>Du hast " + player.questionCount + " von " + QUESTIONS_PER_ROUND + " Fragen richtig beantwortet!</h1>";
                 
-                if(obj.ranking.points[0] === undefined) obj.ranking.points[0] = 0;
+                if(obj.ranking.points[0] == undefined) obj.ranking.points[0] = 0;
                 obj.ranking.points[0] += player.questionCount;
                 
                 player.questionCount = 0;
@@ -250,10 +241,11 @@ var DiamondScope = (function () {
 
     var questionArray = [];
     var currentQuestion;
-    //var game;
+    var game;
+    var widthBefore = -1;
+    var prediff = -1;
 
     var init = function () {
-        sizeCheck();
         eventhandler();
         $.getJSON(SERVER_URL + QUESTION_FILE, function (data) {
             questionArray = data;
@@ -268,11 +260,6 @@ var DiamondScope = (function () {
 
         $(window).resize(function () {
             sizeCheck();
-        });
-
-        $(window).load(function () {
-            sizeCheck();
-            $('audio#background').get(0).volume = 0.05;
         });
 
         $(document).on('click', '#joker-fifty', function () {
@@ -293,11 +280,13 @@ var DiamondScope = (function () {
         $(document).on('click', '#joker-audience', function () {
 
             $(this).addClass('disabled');
-
+           
+            $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
+            
             answers = game.players[game.currentPlayer].useJoker(1);
             answers.forEach(function (e, i) {
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
-                $('#answer-' + char).html(answers[i] + '%');
+                $('#audience').append('#tag-' + char + ':after{height:' + (30 + e) + '%;content:"' + e + '%";}');
             });
 
         });
@@ -319,6 +308,7 @@ var DiamondScope = (function () {
                         if (game.gameMode == 1) game.nextPlayer();
     
                         nextQuestion();
+                        
                     }, 1500);
                 } else {
                     //Sound
@@ -343,7 +333,41 @@ var DiamondScope = (function () {
 
     };
 
+    var verticalAlign = function () {
+         //Vertical align
+        $(".vertical-center").each(function () {
+            $(this).css("margin-top", ($($(this).data("container")).outerHeight() / 2) - ($(this).outerHeight()));
+        });
+
+        $(".vertical-center-2").each(function () {
+            $(this).css("margin-top", ($($(this).data("container")).outerHeight() / 2) - ($(this).outerHeight() / 2));
+        });  
+    };
+    
     var sizeCheck = function () {
+        if(widthBefore==-1) {
+            widthBefore = ($(window).width()<1200) ? 1400 : 1000;
+        }
+        
+        if($(window).width()<1200 && widthBefore >= 1200) {
+            $('body > .container-fluid').css('height', '0');
+            $('body > #main-center.container-fluid').css({'height': '99%'});
+            $('#main-card').css('margin', '0.5%');
+            $('#video-background, #video-background-inner').attr('src', '');
+            $('#video-background-inner').css({'left': '0', 'top': '0', 'width': '100%'});
+            $('body, *').css('font-weight', 300);
+
+        } else if ($(window).width()>=1200 && widthBefore < 1200) {
+            $('body > .container-fluid').css('height', '15%');
+            $('body > #main-center.container-fluid').css({'height': '70%'});
+            $('#main-card').css('margin', '5px');
+            $('#video-background').attr('src', 'assets/videos/QuzzeldullBackgroundLoopCompressed.mp4');
+            $('#video-background-inner').attr('src', 'assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4');
+            $('#video-background-inner').css({'left': '-25%', 'top': '-25%', 'width': '150%'});
+            $('body, *').css('font-weight', 100);
+        }
+        widthBefore = $(window).width();
+            
         if (($(window).outerHeight()) / 9 > ($(window).outerWidth()) / 16) {
             $('body > #video-background').css({
                 'width': 'auto',
@@ -363,15 +387,9 @@ var DiamondScope = (function () {
                 'height': 'auto'
             })
         }
-
-        //Vertical align
-        $(".vertical-center").each(function () {
-            $(this).css("margin-top", ($($(this).attr("data-container")).outerHeight() / 2) - ($(this).outerHeight()));
-        });
-
-        $(".vertical-center-2").each(function () {
-            $(this).css("margin-top", ($($(this).attr("data-container")).outerHeight() / 2) - ($(this).outerHeight() / 2));
-        });
+        
+        verticalAlign();
+        
     };
 
     var initializeGame = function () {
@@ -383,7 +401,7 @@ var DiamondScope = (function () {
         
         difficulty = Math.floor((game.players[game.currentPlayer].questionCount++) / 3);
         
-        if(game.players[game.currentPlayer].questionCount < QUESTIONS_PER_ROUND) {
+        if(game.players[game.currentPlayer].questionCount <= QUESTIONS_PER_ROUND) {
             
             draw.frage(difficulty);
             
@@ -475,14 +493,14 @@ var DiamondScope = (function () {
 
             content = '<div class="container-fluid vertical-center-2" data-container="#main-center">' +
                 '<div class="row" id="player-row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
                 '<h1>Spielername</h1>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
                 '<input type="text" class="main-design names" id="player-name">' +
                 '</div>' +
@@ -525,7 +543,7 @@ var DiamondScope = (function () {
 
             content = '<div class="container-fluid vertical-center-2" data-container="#main-center">' +
                 '<div class="row" id="player-row">' +
-                '<div class="col-xs-6 col-centered">' +
+                '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
                 '<h1>Spielernamen</h1>' +
                 '</div>' +
@@ -606,10 +624,10 @@ var DiamondScope = (function () {
             content = '<div class="container-fluid question-box">' +
                 '<div class="row">' +
                 '<div>' +
-                '<div class="col-xs-5 pull-left">' +
+                '<div class="col-lg-5 pull-left">' +
                 '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                 '</div>' +
-                '<div class="col-xs-4 pull-right">' +
+                '<div class="col-lg-4 pull-right">' +
                 '<div class="main-design" id="current-question">' +
                 '<h3>Frage X</h3>' +
                 '</div>' +
@@ -621,7 +639,7 @@ var DiamondScope = (function () {
                 '</div>' +
                 '<div class="clearfix"></div>' +
                 '<div class="row">' +
-                '<div class="col-xs-12 main-design">' +
+                '<div class="col-lg-12 main-design">' +
                 '<h1 id="question">Wie hei&szlig;t eine gängige Projektmanagement-Methode?</h1>' +
                 '</div>' +
                 '</div>' +
@@ -629,28 +647,28 @@ var DiamondScope = (function () {
                 '<div class="container-fluid answer-box">' +
                 '<div class="container-fluid">' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="0">' +
-                '<h4 class="pull-left">A</h4>' +
-                '<h4 id="answer-a">Duke1</h4>' +
+                '<h4 id="tag-a" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=0]">A</h4>' +
+                '<h4 id="answer-a" class="vertical-center-2" data-container=".answer[data-id=0]">Duke1</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="1">' +
-                '<h4 class="pull-left">B</h4>' +
-                '<h4 id="answer-b">Prince2</h4>' +
+                '<h4 id="tag-b" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=1]">B</h4>' +
+                '<h4 id="answer-b" class="vertical-center-2" data-container=".answer[data-id=1]">Prince2</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="2">' +
-                '<h4 class="pull-left">C</h4>' +
-                '<h4 id="answer-c">King4</h4>' +
+                '<h4 id="tag-c" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=2]">C</h4>' +
+                '<h4 id="answer-c" class="vertical-center-2" data-container=".answer[data-id=2]">King4</h4>' +
                 '</div>' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="3">' +
-                '<h4 class="pull-left">D</h4>' +
-                '<h4 id="answer-d">Queen3</h4>' +
+                '<h4 id="tag-d" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=3]">D</h4>' +
+                '<h4 id="answer-d" class="vertical-center-2" data-container=".answer[data-id=3]">Queen3</h4>' +
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
-                '<div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-audience">' +
-                '<h4>Publikum</h4>' +
+                '<div class="col-lg-2 pull-right rounded-div joker-button main-design" id="joker-audience">' +
+                '<h4 class="vertical-center-2" data-container="#joker-audience">Publikum</h4>' +
                 '</div>' +
-                '<div class="col-xs-2 pull-right rounded-div joker-button main-design" id="joker-fifty">' +
-                '<h4>2 Aus 4</h4>' +
+                '<div class="col-lg-2 pull-right rounded-div joker-button main-design" id="joker-fifty">' +
+                '<h4 class="vertical-center-2" data-container="#joker-fifty">50:50</h4>' +
                 '</div>' +
                 '</div>' +
                 '</div>';
@@ -664,7 +682,7 @@ var DiamondScope = (function () {
             content = '<div class="container-fluid question-box">' +
                          '<div class="row">' +
                             '<div>' +
-                                '<div class="col-xs-5 pull-left">' +
+                                '<div class="col-lg-5 pull-left">' +
                                     '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                                 '</div>' +
                             '</div>' +
@@ -672,14 +690,14 @@ var DiamondScope = (function () {
                         '</div>' +
                         '<div class="vertical-center-2" data-container="#main-center">' +
                             '<div class="row">' +
-                                '<div class="col-xs-12 main-design">';
+                                '<div class="col-lg-12 main-design">';
             
             content += game.conclude();
             
             content +=          '</div>' +
                             '</div>' +
                             '<div class="menu-button rounded-div main-design btn" id="new-game-button">' +
-                                '<h1>Neues Spiel</h1>' +
+                                '<h1>Neue Runde</h1>' +
                             '</div>' +
                             '<div class="menu-button rounded-div main-design btn" id="report-button">' +
                                 '<h1>Zur Auswertung</h1>' +
@@ -691,7 +709,7 @@ var DiamondScope = (function () {
             
             $('#new-game-button').on('click', function () {
                 
-                if((game.round + 1) < ROUND_LIMIT){
+                if(game.round++ < ROUND_LIMIT){
                     
                     game.questions.forEach( function(e){
                         e.used = false; 
@@ -723,7 +741,7 @@ var DiamondScope = (function () {
             content = '<div class="container-fluid question-box">' +
                          '<div class="row">' +
                             '<div>' +
-                                '<div class="col-xs-5 pull-left">' +
+                                '<div class="col-lg-5 pull-left">' +
                                     '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                                 '</div>' +
                             '</div>' +
@@ -731,7 +749,7 @@ var DiamondScope = (function () {
                         '</div>' +
                         '<div class="vertical-center-2" data-container="#main-center">' +
                             '<div class="row">' +
-                                '<div class="col-xs-12 main-design">';
+                                '<div class="col-lg-12 main-design">';
             
             content += game.end();
             
@@ -769,14 +787,17 @@ var DiamondScope = (function () {
 
             var question = getQuestion(difficulty);
             var scrambledAnswers = [0,1,2,3];
-
-            var j, i, temp, x = 0;
+            
+            var j, i, temp;
+            var x = question.rightAnswer;
             for (i = 0; i < 4; i++) {
                 j = Math.floor(Math.random() * (i + 1));
-                console.log(j);
                 if (j == x) {
                     question.rightAnswer = i;
                     x = i;
+                } else if(i == x){
+                    question.rightAnswer = j;
+                    x = j;
                 }
                 temp = question.answers[i];
                 question.answers[i] = question.answers[j];
@@ -803,6 +824,9 @@ var DiamondScope = (function () {
             $('.joker-button').removeClass('disabled');
             if (game.players[game.currentPlayer].joker.audience == 0) $('#joker-audience').addClass('disabled');
             if (game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
+            $('#audience').html('.audience:after{opacity:0;}.audience{opacity:1;}');
+            
+            verticalAlign();
             
             //Voice
             var playVoice = function() {
@@ -813,7 +837,6 @@ var DiamondScope = (function () {
 
                 $audio.attr('src', voicePath + question.id + '-q' + fileType);
                 audio.addEventListener('ended', function audioQ() {
-                    console.log('test');
                     $audio.attr('src', voicePath + '-answer-a' + fileType);
                     audio.removeEventListener('ended', audioQ);
                     audio.addEventListener('ended', function audioA() {
@@ -913,12 +936,18 @@ var DiamondScope = (function () {
 
     return {
         init: init,
+        sizeCheck: sizeCheck,
     }
 
 })();
 
 $(function () {
     $(window).load(function () {
+        
+        $('body, *').css('font-weight', 100);
+        
+        DiamondScope.sizeCheck();
+        $('audio#background').get(0).volume = 0.05;
 
         setTimeout(function () {
 
