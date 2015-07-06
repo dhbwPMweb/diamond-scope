@@ -242,6 +242,7 @@ var DiamondScope = (function () {
     var questionArray = [];
     var currentQuestion;
     var game;
+    var widthBefore = -1;
 
     var init = function () {
         sizeCheck();
@@ -258,10 +259,6 @@ var DiamondScope = (function () {
     var eventhandler = function () {
 
         $(window).resize(function () {
-            sizeCheck();
-        });
-
-        $(window).load(function () {
             sizeCheck();
         });
 
@@ -321,19 +318,27 @@ var DiamondScope = (function () {
     };
 
     var sizeCheck = function () {
-        if($(window).width()<1200) {
+        if(widthBefore==-1) {
+            widthBefore = ($(window).width()<1200) ? 1400 : 1000;
+        }
+        console.log(widthBefore);
+        if($(window).width()<1200 && widthBefore >= 1200) {
             $('body > .container-fluid').css('height', '0');
             $('body > #main-center.container-fluid').css({'height': '99%'});
             $('#main-card').css('margin', '0');
             $('#video-background, #video-background-inner').attr('src', '');
-            
-        } else {
+            $('#video-background-inner').css({'left': '0', 'top': '0', 'width': '100%'});
+
+        } else if ($(window).width()>=1200 && widthBefore < 1200) {
             $('body > .container-fluid').css('height', '15%');
             $('body > #main-center.container-fluid').css({'height': '70%'});
             $('#main-card').css('margin', '5px');
             $('#video-background').attr('src', 'assets/videos/QuzzeldullBackgroundLoopCompressed.mp4');
             $('#video-background-inner').attr('src', 'assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4');
+            $('#video-background-inner').css({'left': '-25%', 'top': '-25%', 'width': '150%'});
         }
+        widthBefore = $(window).width();
+            
         if (($(window).outerHeight()) / 9 > ($(window).outerWidth()) / 16) {
             $('body > #video-background').css({
                 'width': 'auto',
@@ -855,12 +860,15 @@ var DiamondScope = (function () {
 
     return {
         init: init,
+        sizeCheck: sizeCheck,
     }
 
 })();
 
 $(function () {
     $(window).load(function () {
+        
+        DiamondScope.sizeCheck();
 
         setTimeout(function () {
 
