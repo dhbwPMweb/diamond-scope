@@ -2,6 +2,7 @@
  body,
  {
      height: 100% !important;
+     font-weight: 100;
      overflow: hidden !important;
  }
  
@@ -12,6 +13,7 @@
      -o-user-select: none !important;
      user-select: none !important;
      cursor: default !important;
+     font-weight: 100;
  }
  
  input {

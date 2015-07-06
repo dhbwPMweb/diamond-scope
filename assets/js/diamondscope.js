@@ -245,7 +245,6 @@ var DiamondScope = (function () {
     var widthBefore = -1;
 
     var init = function () {
-        sizeCheck();
         eventhandler();
         $.getJSON(SERVER_URL + QUESTION_FILE, function (data) {
             questionArray = data;
@@ -341,6 +340,7 @@ var DiamondScope = (function () {
             $('#main-card').css('margin', '0.5%');
             $('#video-background, #video-background-inner').attr('src', '');
             $('#video-background-inner').css({'left': '0', 'top': '0', 'width': '100%'});
+            $('body, *').css('font-weight', 300);
 
         } else if ($(window).width()>=1200 && widthBefore < 1200) {
             $('body > .container-fluid').css('height', '15%');
@@ -349,6 +349,7 @@ var DiamondScope = (function () {
             $('#video-background').attr('src', 'assets/videos/QuzzeldullBackgroundLoopCompressed.mp4');
             $('#video-background-inner').attr('src', 'assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4');
             $('#video-background-inner').css({'left': '-25%', 'top': '-25%', 'width': '150%'});
+            $('body, *').css('font-weight', 100);
         }
         widthBefore = $(window).width();
             
@@ -877,6 +878,8 @@ var DiamondScope = (function () {
 
 $(function () {
     $(window).load(function () {
+        
+        $('body, *').css('font-weight', 100);
         
         DiamondScope.sizeCheck();
 
