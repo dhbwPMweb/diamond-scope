@@ -284,6 +284,7 @@ var DiamondScope = (function () {
            
             answers = game.players[game.currentPlayer].useJoker(1);
             if(answers != 0) $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
+            else answers = [];
             
             answers.forEach(function (e, i) {
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
