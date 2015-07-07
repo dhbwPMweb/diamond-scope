@@ -7,6 +7,7 @@ var DiamondScope = (function () {
         this.difficulty = difficulty;
         this.id = id;
         this.used = false;
+        this.scrambledAnswers = [0,1,2,3];
     };
 
     Question.prototype = {
@@ -43,7 +44,7 @@ var DiamondScope = (function () {
                     this.joker.audience = 0;
                     return game.useAudience(currentQuestion.difficulty, currentQuestion.rightAnswer);
                 } else {
-                    return [];
+                    return 0;
                 }
             }
         },
@@ -281,9 +282,9 @@ var DiamondScope = (function () {
 
             $(this).addClass('disabled');
            
-            $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
-            
             answers = game.players[game.currentPlayer].useJoker(1);
+            if(answers != 0) $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
+            
             answers.forEach(function (e, i) {
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
                 $('#audience').append('#tag-' + char + ':after{height:' + (30 + e) + '%;content:"' + e + '%";}');
@@ -293,8 +294,12 @@ var DiamondScope = (function () {
 
         $(document).on('click', '.answer', function () {
             if(!($(this).hasClass('disabled'))){
+                
                 $('.answer').addClass('disabled');
                 id = $(this).data('id');
+                
+                $('#main-card').focus();
+                
                 if (id == currentQuestion.rightAnswer) {
                     //Sound
                     
@@ -786,7 +791,6 @@ var DiamondScope = (function () {
             };
 
             var question = getQuestion(difficulty);
-            var scrambledAnswers = [0,1,2,3];
             
             var j, i, temp;
             var x = question.rightAnswer;
@@ -802,9 +806,9 @@ var DiamondScope = (function () {
                 temp = question.answers[i];
                 question.answers[i] = question.answers[j];
                 question.answers[j] = temp;
-                temp = scrambledAnswers[i];
-                scrambledAnswers[i] = scrambledAnswers[j];
-                scrambledAnswers[j] = temp;
+                temp = question.scrambledAnswers[i];
+                question.scrambledAnswers[i] = question.scrambledAnswers[j];
+                question.scrambledAnswers[j] = temp;
             }
 
             //Difficulty
@@ -840,25 +844,25 @@ var DiamondScope = (function () {
                     $audio.attr('src', voicePath + '-answer-a' + fileType);
                     audio.removeEventListener('ended', audioQ);
                     audio.addEventListener('ended', function audioA() {
-                        $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[0] + fileType);
+                        $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[0] + fileType);
                         audio.removeEventListener('ended', audioA);
                         audio.addEventListener('ended', function audioZero() {
                             $audio.attr('src', voicePath + '-answer-b' + fileType);
                             audio.removeEventListener('ended', audioZero);
                             audio.addEventListener('ended', function audioB() {
-                                $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[1] + fileType);
+                                $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[1] + fileType);
                                 audio.removeEventListener('ended', audioB);
                                 audio.addEventListener('ended', function audioOne() {
                                     $audio.attr('src', voicePath + '-answer-c' + fileType);
                                     audio.removeEventListener('ended', audioOne);
                                     audio.addEventListener('ended', function audioC() {
-                                        $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[2] + fileType);
+                                        $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[2] + fileType);
                                         audio.removeEventListener('ended', audioC);
                                         audio.addEventListener('ended', function audioTwo() {
                                             $audio.attr('src', voicePath + '-answer-d' + fileType);
                                             audio.removeEventListener('ended', audioTwo);
                                             audio.addEventListener('ended', function audioD() {
-                                                $audio.attr('src', voicePath + question.id + '-' + scrambledAnswers[3] + fileType);
+                                                $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[3] + fileType);
                                                 audio.removeEventListener('ended', audioD);
                                                 audio.addEventListener('ended', function audioThree() {
                                                     audio.pause();
@@ -921,6 +925,7 @@ var DiamondScope = (function () {
                 func();
                 setTimeout(function () {
                     $('#content-div').removeClass('fade');
+                    verticalAlign();
                 }, 500);
                 sizeCheck();
             }, 500);
@@ -948,6 +953,7 @@ $(function () {
         
         DiamondScope.sizeCheck();
         $('audio#background').get(0).volume = 0.05;
+        $('audio#event').get(0).volume = 0.2;
 
         setTimeout(function () {
 
