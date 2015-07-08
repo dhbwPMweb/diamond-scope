@@ -501,7 +501,7 @@ var DiamondScope = (function () {
                 '<div class="row" id="player-row">' +
                 '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
-                '<h1>Spielername</h1>' +
+                '<h1>Spielername<small><br>muss nicht zwingend eingetragen werden</small></h1>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -551,7 +551,7 @@ var DiamondScope = (function () {
                 '<div class="row" id="player-row">' +
                 '<div class="col-lg-6 col-centered">' +
                 '<div class="main-design">' +
-                '<h1>Spielernamen</h1>' +
+                '<h1>Spielernamen<small><br>muss nicht zwingend eingetragen werden</small></h1>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -814,7 +814,8 @@ var DiamondScope = (function () {
 
             //Difficulty
             category = " (Kategorie: " + (difficulty + 1) + ")";
-            player = "Spieler " + (game.players[game.currentPlayer].id + 1) + " - " + game.players[game.currentPlayer].name;
+            player = "Spieler " + (game.players[game.currentPlayer].id + 1);
+            player += game.players[game.currentPlayer].name == '' ? '' : " - " + game.players[game.currentPlayer].name
             $('#current-question > h3').html('Frage ' + game.players[game.currentPlayer].questionCount + category);
             $('#player > h4').html(player);
             $('#question').html(question.question);
@@ -939,10 +940,32 @@ var DiamondScope = (function () {
         };
 
     })();
+    
+    var test = function(){
+        (function _test(index){
+            
+                
+            $('#question').html(questionArray[index].question);
+            $('#answer-a').html(questionArray[index].answers[0]);
+            $('#answer-b').html(questionArray[index].answers[1]);
+            $('#answer-c').html(questionArray[index].answers[2]);
+            $('#answer-d').html(questionArray[index].answers[3]);
+            
+            verticalAlign();
+            
+            setTimeout(function(){
+                
+                if(index > 0) _test(--index);
+                
+            }, 500);
+            
+        })(questionArray.length - 1);
+    };
 
     return {
         init: init,
         sizeCheck: sizeCheck,
+        test: test
     }
 
 })();
