@@ -394,6 +394,15 @@ var DiamondScope = (function () {
             })
         }
         
+        if (($('#main-card').innerHeight()) < ($('#content-div').innerHeight())) {
+            $('#main-card').css({
+                'overflow': 'scroll'
+            })
+            $('#video-background-inner').css({
+                'position': 'fixed'
+            })
+        }
+        
         verticalAlign();
         
     };
