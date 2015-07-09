@@ -7,7 +7,7 @@ var DiamondScope = (function () {
         this.difficulty = difficulty;
         this.id = id;
         this.used = false;
-        this.scrambledAnswers = [0,1,2,3];
+        this.scrambledAnswers = [0, 1, 2, 3];
     };
 
     Question.prototype = {
@@ -139,103 +139,103 @@ var DiamondScope = (function () {
             this.currentPlayer++;
             if (this.currentPlayer == this.players.length) {
                 this.currentPlayer = 0;
-//                this.change = true;
+                //                this.change = true;
             }
 
             while (this.expulsedPlayers[this.currentPlayer]) {
 
-//                this.change = false;
+                //                this.change = false;
                 this.currentPlayer++;
                 if (this.currentPlayer == this.players.length) {
                     this.currentPlayer = 0;
-//                    this.change = true;
+                    //                    this.change = true;
                 }
 
             }
 
         },
-        
+
         conclude: function () {
-            
+
             obj = this;
-            
+
             if (obj.gameMode == 1) {
                 obj.players.sort(function (a, b) {
-                   return b.questionCount - a.questionCount;
+                    return b.questionCount - a.questionCount;
                 });
-                
-                if(obj.ranking.rounds[obj.players[0].id] == undefined) game.ranking.rounds[game.players[0].id] = 0;
-                obj.ranking.rounds[obj.players[0].id]++;
-                
+
+                if (obj.ranking.rounds[obj.players[0].id] == undefined) game.ranking.rounds[game.players[0].id] = 0;
+                obj.ranking.rounds[obj.players[0].id] ++;
+
                 content = '<h1>Herzlichen Glückwunsch ' + obj.players[0].name + '</h1>';
-                
-                obj.players.forEach( function(e, i){
-                    
+
+                obj.players.forEach(function (e, i) {
+
                     e.questionCount--;
-                    
-                    if(obj.ranking.points[e.id] === undefined) obj.ranking.points[e.id] = 0;
+
+                    if (obj.ranking.points[e.id] === undefined) obj.ranking.points[e.id] = 0;
                     obj.ranking.points[e.id] += e.questionCount;
-                    
+
                     content += '<h1>' + (i + 1) + '. ' + e.name + ' mit ' + e.questionCount + ' Punkten</h1>';
                     e.questionCount = 0;
-                    
+
                     e.joker.audience = 1;
                     e.joker.fifty = 1;
-                    
+
                 });
-                
+
             } else if (obj.gameMode == 0) {
-                
+
                 player = obj.players[0];
                 player.questionCount--;
-                
+
                 content = "<h1>Du hast " + player.questionCount + " von " + QUESTIONS_PER_ROUND + " Fragen richtig beantwortet!</h1>";
-                
-                if(obj.ranking.points[0] == undefined) obj.ranking.points[0] = 0;
+
+                if (obj.ranking.points[0] == undefined) obj.ranking.points[0] = 0;
                 obj.ranking.points[0] += player.questionCount;
-                
+
                 player.questionCount = 0;
                 player.joker.audience = 1;
                 player.joker.fifty = 1;
-                
+
             }
-            
+
             return content;
-            
+
         },
-        
-        end: function() {
-            
+
+        end: function () {
+
             content = "";
-            
+
             this.round++;
-            
-            if(game.gameMode == 0){
-                
+
+            if (game.gameMode == 0) {
+
                 content += '<h1>Du hast ' + this.round + ' Runden gespielt und dabei ' + obj.ranking.points[0] + ' Punkte erreicht</h1>';
-                
-            } else if(game.gameMode == 1){
-                
+
+            } else if (game.gameMode == 1) {
+
                 obj = this;
-                
-                game.players.sort(function(a, b) {
-                    
+
+                game.players.sort(function (a, b) {
+
                     obj.ranking.points[b.id] - obj.ranking.points[a.id];
-                    
+
                 });
-                
-                game.players.forEach(function(e, i) {
-                    
-                    if(obj.ranking.rounds[e.id] === undefined) obj.ranking.rounds[e.id] = 0;
-                   
+
+                game.players.forEach(function (e, i) {
+
+                    if (obj.ranking.rounds[e.id] === undefined) obj.ranking.rounds[e.id] = 0;
+
                     content += '<h1>' + (i + 1) + '. ' + e.name + ' mit ' + obj.ranking.points[e.id] + ' Punkten und ' + obj.ranking.rounds[e.id] + ' gewonnenen Runden</h1>';
-                    
+
                 });
-                
+
             }
-            
+
             return content;
-            
+
         },
 
     };
@@ -253,6 +253,7 @@ var DiamondScope = (function () {
             questionArray.forEach(function (e, i) {
                 questionArray[i] = new Question(e.question, e.answers, e.rightAnswer, e.difficulty, e.id);
             });
+            music_enabled = true;
             initializeGame();
         });
     };
@@ -281,11 +282,11 @@ var DiamondScope = (function () {
         $(document).on('click', '#joker-audience', function () {
 
             $(this).addClass('disabled');
-           
+
             answers = game.players[game.currentPlayer].useJoker(1);
-            if(answers != 0) $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
+            if (answers != 0) $('#audience').html('.audience:after{opacity:1;}.audience{color:transparent;}');
             else answers = [];
-            
+
             answers.forEach(function (e, i) {
                 char = (i == 0) ? 'a' : (i == 1) ? 'b' : (i == 2) ? 'c' : 'd';
                 $('#audience').append('#tag-' + char + ':after{height:' + (30 + e) + '%;content:"' + e + '%";}');
@@ -293,37 +294,54 @@ var DiamondScope = (function () {
 
         });
 
+        $(document).on('click', '#sound-button', function () {
+            if (music_enabled) {
+                $(this).addClass('off');
+                $('audio').each(function () {
+                    this.pause(); // Stop playing
+                    this.currentTime = 0; // Reset time
+                });
+                music_enabled = false;
+            } else {
+                $(this).removeClass('off');
+                $('audio#background').each(function () {
+                    this.play(); // Stop playing
+                });
+                music_enabled = true;
+            }
+        })
+
         $(document).on('click', '.answer', function () {
-            if(!($(this).hasClass('disabled'))){
-                
+            if (!($(this).hasClass('disabled'))) {
+
                 $('.answer').addClass('disabled');
                 id = $(this).data('id');
-                
+
                 $('#main-card').focus();
-                
+
                 if (id == currentQuestion.rightAnswer) {
                     //Sound
-                    
-                    $('audio#event').attr('src', 'assets/sounds/Frage_Richtig.mp3');
-                    $('audio#event').get(0).play();
-                    
+                    if (music_enabled) {
+                        $('audio#event').attr('src', 'assets/sounds/Frage_Richtig.mp3');
+                        $('audio#event').get(0).play();
+                    }
                     //End of Sound
                     $(this).addClass('green');
                     setTimeout(function () {
-    
+
                         if (game.gameMode == 1) game.nextPlayer();
-    
+
                         nextQuestion();
-                        
+
                     }, 1500);
                 } else {
                     //Sound
-                    
-                    $('audio#event').attr('src', 'assets/sounds/Frage_Falsch.mp3');
-                    $('audio#event').get(0).play();
-                    $('audio#background').get(0).pause();
-                    $('audio#voice').get(0).pause();
-                    
+                    if (music_enabled) {
+                        $('audio#event').attr('src', 'assets/sounds/Frage_Falsch.mp3');
+                        $('audio#event').get(0).play();
+                        $('audio#background').get(0).pause();
+                        $('audio#voice').get(0).pause();
+                    }
                     //End of Sound
                     $(this).addClass('red');
                     $('.answer').each(function () {
@@ -340,40 +358,52 @@ var DiamondScope = (function () {
     };
 
     var verticalAlign = function () {
-         //Vertical align
+        //Vertical align
         $(".vertical-center").each(function () {
             $(this).css("margin-top", ($($(this).data("container")).outerHeight() / 2) - ($(this).outerHeight()));
         });
 
         $(".vertical-center-2").each(function () {
             $(this).css("margin-top", ($($(this).data("container")).outerHeight() / 2) - ($(this).outerHeight() / 2));
-        });  
+        });
     };
-    
+
     var sizeCheck = function () {
-        if(widthBefore==-1) {
-            widthBefore = ($(window).width()<1200) ? 1400 : 1000;
+        if (widthBefore == -1) {
+            widthBefore = ($(window).width() < 1200) ? 1400 : 1000;
         }
-        
-        if($(window).width()<1200 && widthBefore >= 1200) {
+
+        if ($(window).width() < 1200 && widthBefore >= 1200) {
             $('body > .container-fluid').css('height', '0');
-            $('body > #main-center.container-fluid').css({'height': '99%'});
+            $('body > #main-center.container-fluid').css({
+                'height': '99%'
+            });
             $('#main-card').css('margin', '0.5%');
             $('#video-background, #video-background-inner').attr('src', '');
-            $('#video-background-inner').css({'left': '0', 'top': '0', 'width': '100%'});
+            $('#video-background-inner').css({
+                'left': '0',
+                'top': '0',
+                'width': '100%'
+            });
             $('body, *').css('font-weight', 300);
 
-        } else if ($(window).width()>=1200 && widthBefore < 1200) {
+        } else if ($(window).width() >= 1200 && widthBefore < 1200) {
             $('body > .container-fluid').css('height', '15%');
-            $('body > #main-center.container-fluid').css({'height': '70%'});
+            $('body > #main-center.container-fluid').css({
+                'height': '70%'
+            });
             $('#main-card').css('margin', '5px');
             $('#video-background').attr('src', 'assets/videos/QuzzeldullBackgroundLoopCompressed.mp4');
             $('#video-background-inner').attr('src', 'assets/videos/QuzzeldullBackgroundLoopBlurCompressed.mp4');
-            $('#video-background-inner').css({'left': '-25%', 'top': '-25%', 'width': '150%'});
+            $('#video-background-inner').css({
+                'left': '-25%',
+                'top': '-25%',
+                'width': '150%'
+            });
             $('body, *').css('font-weight', 100);
         }
         widthBefore = $(window).width();
-            
+
         if (($(window).outerHeight()) / 9 > ($(window).outerWidth()) / 16) {
             $('body > #video-background').css({
                 'width': 'auto',
@@ -393,9 +423,9 @@ var DiamondScope = (function () {
                 'height': 'auto'
             })
         }
-        
+
         verticalAlign();
-        
+
     };
 
     var initializeGame = function () {
@@ -404,17 +434,17 @@ var DiamondScope = (function () {
     };
 
     var nextQuestion = function () {
-        
+
         difficulty = Math.floor((game.players[game.currentPlayer].questionCount++) / 3);
-        
-        if(game.players[game.currentPlayer].questionCount <= QUESTIONS_PER_ROUND) {
-            
+
+        if (game.players[game.currentPlayer].questionCount <= QUESTIONS_PER_ROUND) {
+
             draw.frage(difficulty);
-            
+
         } else {
-            
-            draw.endView(); 
-            
+
+            draw.endView();
+
         }
 
     };
@@ -467,6 +497,9 @@ var DiamondScope = (function () {
                 '<div class="menu-button col-centered rounded-div main-design btn" id="multiplayer-button">' +
                 '<h1>Multiplayer</h1>' +
                 '</div><div class="clearfix"></div>' +
+                '<div class="menu-button col-centered rounded-div main-design btn" id="sound-button">' +
+                '<h1><span class="main-design glyphicon glyphicon-music"></span>Musik aus</h1>' +
+                '</div>' +
                 '</div>';
 
             $('#content-div').html(content);
@@ -480,19 +513,19 @@ var DiamondScope = (function () {
                 $(this).off('click');
                 changeScreen(multiPlayer);
             });
-            
-            //Sound
-            
-            $('audio#background').removeAttr('loop');
-            $('audio#background').attr('src', 'assets/sounds/Start_Musik.mp3');
-            $('audio#background').get(0).addEventListener('ended', function startAudio() {
-                $('audio#background').attr('src', 'assets/sounds/Start_Musik_Loop.mp3');
-                $('audio#background').attr('loop', 'loop');
-                $('audio#background').get(0).play();
-                $('audio#background').get(0).removeEventListener('ended', startAudio);
-            });
-            $('audio#background').get(0).play();
 
+            //Sound
+            if (music_enabled) {
+                $('audio#background').removeAttr('loop');
+                $('audio#background').attr('src', 'assets/sounds/Start_Musik.mp3');
+                $('audio#background').get(0).addEventListener('ended', function startAudio() {
+                    $('audio#background').attr('src', 'assets/sounds/Start_Musik_Loop.mp3');
+                    $('audio#background').attr('loop', 'loop');
+                    $('audio#background').get(0).play();
+                    $('audio#background').get(0).removeEventListener('ended', startAudio);
+                });
+                $('audio#background').get(0).play();
+            }
         };
 
         var singlePlayer = function () {
@@ -686,57 +719,57 @@ var DiamondScope = (function () {
         var endScreen = function () {
 
             content = '<div class="container-fluid question-box">' +
-                         '<div class="row">' +
-                            '<div>' +
-                                '<div class="col-lg-5 pull-left">' +
-                                    '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
-                                '</div>' +
-                            '</div>' +
-                         '</div>' +
-                        '</div>' +
-                        '<div class="vertical-center-2" data-container="#main-center">' +
-                            '<div class="row">' +
-                                '<div class="col-lg-12 main-design">';
-            
+                '<div class="row">' +
+                '<div>' +
+                '<div class="col-lg-5 pull-left">' +
+                '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="vertical-center-2" data-container="#main-center">' +
+                '<div class="row">' +
+                '<div class="col-lg-12 main-design">';
+
             content += game.conclude();
-            
-            content +=          '</div>' +
-                            '</div>' +
-                            '<div class="menu-button rounded-div main-design btn" id="new-game-button">' +
-                                '<h1>Neue Runde</h1>' +
-                            '</div>' +
-                            '<div class="menu-button rounded-div main-design btn" id="report-button">' +
-                                '<h1>Zur Auswertung</h1>' +
-                            '</div>' +
-                        '</div>' +
-                        '</div>';
+
+            content += '</div>' +
+                '</div>' +
+                '<div class="menu-button rounded-div main-design btn" id="new-game-button">' +
+                '<h1>Neue Runde</h1>' +
+                '</div>' +
+                '<div class="menu-button rounded-div main-design btn" id="report-button">' +
+                '<h1>Zur Auswertung</h1>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
 
             $('#content-div').html(content);
-            
+
             $('#new-game-button').on('click', function () {
-                
-                if(game.round++ < ROUND_LIMIT){
-                    
-                    game.questions.forEach( function(e){
-                        e.used = false; 
+
+                if (game.round++ < ROUND_LIMIT) {
+
+                    game.questions.forEach(function (e) {
+                        e.used = false;
                     });
-                    
+
                     game.expulsedPlayers = {};
                     changeScreen(questionScreen);
                     setTimeout(function () {
                         nextQuestion();
                     }, 501);
-                    
+
                 } else {
-                    
+
                     $(this).html('<h1>Es ist leider nicht möglich mehr als ' + ROUND_LIMIT + ' Runden zu spielen</h1>');
                     $(this).off('click');
-                    
+
                 }
-                
+
             });
-            
-            $('#report-button').on('click', function(){
+
+            $('#report-button').on('click', function () {
                 reportScreen();
             });
 
@@ -745,31 +778,31 @@ var DiamondScope = (function () {
         var reportScreen = function () {
 
             content = '<div class="container-fluid question-box">' +
-                         '<div class="row">' +
-                            '<div>' +
-                                '<div class="col-lg-5 pull-left">' +
-                                    '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
-                                '</div>' +
-                            '</div>' +
-                         '</div>' +
-                        '</div>' +
-                        '<div class="vertical-center-2" data-container="#main-center">' +
-                            '<div class="row">' +
-                                '<div class="col-lg-12 main-design">';
-            
+                '<div class="row">' +
+                '<div>' +
+                '<div class="col-lg-5 pull-left">' +
+                '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="vertical-center-2" data-container="#main-center">' +
+                '<div class="row">' +
+                '<div class="col-lg-12 main-design">';
+
             content += game.end();
-            
-            content +=          '</div>' +
-                            '</div>' +
-                            '<div class="menu-button rounded-div main-design btn" id="menu-button">' +
-                                '<h1>Zum Hauptmenu</h1>' +
-                            '</div>' +
-                        '</div>' +
-                        '</div>';
+
+            content += '</div>' +
+                '</div>' +
+                '<div class="menu-button rounded-div main-design btn" id="menu-button">' +
+                '<h1>Zum Hauptmenu</h1>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
 
             $('#content-div').html(content);
-            
-            $('#menu-button').on('click', function(){
+
+            $('#menu-button').on('click', function () {
                 game = new Game(questionArray);
                 startMenu();
             });
@@ -787,12 +820,12 @@ var DiamondScope = (function () {
                 currentQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
 
                 currentQuestion.used = true;
-                
+
                 return currentQuestion;
             };
 
             var question = getQuestion(difficulty);
-            
+
             var j, i, temp;
             var x = question.rightAnswer;
             for (i = 0; i < 4; i++) {
@@ -800,7 +833,7 @@ var DiamondScope = (function () {
                 if (j == x) {
                     question.rightAnswer = i;
                     x = i;
-                } else if(i == x){
+                } else if (i == x) {
                     question.rightAnswer = j;
                     x = j;
                 }
@@ -831,44 +864,47 @@ var DiamondScope = (function () {
             if (game.players[game.currentPlayer].joker.audience == 0) $('#joker-audience').addClass('disabled');
             if (game.players[game.currentPlayer].joker.fifty == 0) $('#joker-fifty').addClass('disabled');
             $('#audience').html('.audience:after{opacity:0;}.audience{opacity:1;}');
-            
-            verticalAlign();
-            
-            //Voice
-            var playVoice = function() {
-                var audio = $('audio#voice').get(0);
-                var $audio = $('audio#voice');
-                var voicePath = 'assets/voices/voice';
-                var fileType = '.mp3';
 
-                $audio.attr('src', voicePath + question.id + '-q' + fileType);
-                audio.addEventListener('ended', function audioQ() {
-                    $audio.attr('src', voicePath + '-answer-a' + fileType);
-                    audio.removeEventListener('ended', audioQ);
-                    audio.addEventListener('ended', function audioA() {
-                        $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[0] + fileType);
-                        audio.removeEventListener('ended', audioA);
-                        audio.addEventListener('ended', function audioZero() {
-                            $audio.attr('src', voicePath + '-answer-b' + fileType);
-                            audio.removeEventListener('ended', audioZero);
-                            audio.addEventListener('ended', function audioB() {
-                                $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[1] + fileType);
-                                audio.removeEventListener('ended', audioB);
-                                audio.addEventListener('ended', function audioOne() {
-                                    $audio.attr('src', voicePath + '-answer-c' + fileType);
-                                    audio.removeEventListener('ended', audioOne);
-                                    audio.addEventListener('ended', function audioC() {
-                                        $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[2] + fileType);
-                                        audio.removeEventListener('ended', audioC);
-                                        audio.addEventListener('ended', function audioTwo() {
-                                            $audio.attr('src', voicePath + '-answer-d' + fileType);
-                                            audio.removeEventListener('ended', audioTwo);
-                                            audio.addEventListener('ended', function audioD() {
-                                                $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[3] + fileType);
-                                                audio.removeEventListener('ended', audioD);
-                                                audio.addEventListener('ended', function audioThree() {
-                                                    audio.pause();
-                                                    audio.removeEventListener('ended', audioThree);
+            verticalAlign();
+
+            //Voice
+            var playVoice = function () {
+                if (music_enabled) {
+                    var audio = $('audio#voice').get(0);
+                    var $audio = $('audio#voice');
+                    var voicePath = 'assets/voices/voice';
+                    var fileType = '.mp3';
+
+                    $audio.attr('src', voicePath + question.id + '-q' + fileType);
+                    audio.addEventListener('ended', function audioQ() {
+                        $audio.attr('src', voicePath + '-answer-a' + fileType);
+                        audio.removeEventListener('ended', audioQ);
+                        audio.addEventListener('ended', function audioA() {
+                            $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[0] + fileType);
+                            audio.removeEventListener('ended', audioA);
+                            audio.addEventListener('ended', function audioZero() {
+                                $audio.attr('src', voicePath + '-answer-b' + fileType);
+                                audio.removeEventListener('ended', audioZero);
+                                audio.addEventListener('ended', function audioB() {
+                                    $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[1] + fileType);
+                                    audio.removeEventListener('ended', audioB);
+                                    audio.addEventListener('ended', function audioOne() {
+                                        $audio.attr('src', voicePath + '-answer-c' + fileType);
+                                        audio.removeEventListener('ended', audioOne);
+                                        audio.addEventListener('ended', function audioC() {
+                                            $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[2] + fileType);
+                                            audio.removeEventListener('ended', audioC);
+                                            audio.addEventListener('ended', function audioTwo() {
+                                                $audio.attr('src', voicePath + '-answer-d' + fileType);
+                                                audio.removeEventListener('ended', audioTwo);
+                                                audio.addEventListener('ended', function audioD() {
+                                                    $audio.attr('src', voicePath + question.id + '-' + question.scrambledAnswers[3] + fileType);
+                                                    audio.removeEventListener('ended', audioD);
+                                                    audio.addEventListener('ended', function audioThree() {
+                                                        audio.pause();
+                                                        audio.removeEventListener('ended', audioThree);
+                                                    });
+                                                    audio.play();
                                                 });
                                                 audio.play();
                                             });
@@ -885,35 +921,35 @@ var DiamondScope = (function () {
                         audio.play();
                     });
                     audio.play();
-                });
-                audio.play();
+                }
             }
-            
+
             //End of Voice
-            
+
             //Sound
-            
-            if(difficulty<2) {
-                if(difficulty!=prediff) {
-                    $('audio#background').attr('src', 'assets/sounds/Frage_Stufe_' + (difficulty+1) + '.mp3');
-                    $('audio#background').attr('loop', 'loop');
+
+            if (music_enabled) {
+                if (difficulty < 2) {
+                    if (difficulty != prediff) {
+                        $('audio#background').attr('src', 'assets/sounds/Frage_Stufe_' + (difficulty + 1) + '.mp3');
+                        $('audio#background').attr('loop', 'loop');
+                        $('audio#background').get(0).play();
+                    }
+                    playVoice();
+                } else {
+                    $('audio#background').removeAttr('loop');
+                    $('audio#background').attr('src', 'assets/sounds/Frage_Income.mp3');
+                    $('audio#background').get(0).addEventListener('ended', function startAudio() {
+                        playVoice();
+                        $('audio#background').attr('src', 'assets/sounds/Frage_Stufe_' + (difficulty + 1) + '.mp3');
+                        $('audio#background').attr('loop', 'loop');
+                        $('audio#background').get(0).play();
+                        $('audio#background').get(0).removeEventListener('ended', startAudio);
+                    });
                     $('audio#background').get(0).play();
                 }
-                playVoice();
-            } else {
-                $('audio#background').removeAttr('loop');
-                $('audio#background').attr('src', 'assets/sounds/Frage_Income.mp3');
-                $('audio#background').get(0).addEventListener('ended', function startAudio() {
-                    playVoice();
-                    $('audio#background').attr('src', 'assets/sounds/Frage_Stufe_' + (difficulty+1) + '.mp3');
-                    $('audio#background').attr('loop', 'loop');
-                    $('audio#background').get(0).play();
-                    $('audio#background').get(0).removeEventListener('ended', startAudio);
-                });
-                $('audio#background').get(0).play();
+                prediff = difficulty;
             }
-            prediff = difficulty;
-            
             //End of Sound
         };
 
@@ -940,25 +976,25 @@ var DiamondScope = (function () {
         };
 
     })();
-    
-    var test = function(){
-        (function _test(index){
-            
-                
+
+    var test = function () {
+        (function _test(index) {
+
+
             $('#question').html(questionArray[index].question);
             $('#answer-a').html(questionArray[index].answers[0]);
             $('#answer-b').html(questionArray[index].answers[1]);
             $('#answer-c').html(questionArray[index].answers[2]);
             $('#answer-d').html(questionArray[index].answers[3]);
-            
+
             verticalAlign();
-            
-            setTimeout(function(){
-                
-                if(index > 0) _test(--index);
-                
+
+            setTimeout(function () {
+
+                if (index > 0) _test(--index);
+
             }, 500);
-            
+
         })(questionArray.length - 1);
     };
 
@@ -972,9 +1008,9 @@ var DiamondScope = (function () {
 
 $(function () {
     $(window).load(function () {
-        
+
         $('body, *').css('font-weight', 100);
-        
+
         DiamondScope.sizeCheck();
         $('audio#background').get(0).volume = 0.05;
         $('audio#event').get(0).volume = 0.2;
