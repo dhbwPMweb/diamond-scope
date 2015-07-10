@@ -423,6 +423,16 @@ var DiamondScope = (function () {
                 'height': 'auto'
             })
         }
+        
+        
+        if (($('#main-card').innerHeight()) < ($('#content-div').innerHeight())) {
+            var answer_height = ($('#main-card').outerHeight()) - ($('#question-box').outerHeight())
+            
+            $('#answer-box').css({
+                'height': answer_height,
+                'overflow': 'scroll'
+            })
+        }
 
         verticalAlign();
 
@@ -660,7 +670,7 @@ var DiamondScope = (function () {
 
         var questionScreen = function () {
 
-            content = '<div class="container-fluid question-box">' +
+            content = '<div class="container-fluid" id="question-box">' +
                 '<div class="row">' +
                 '<div>' +
                 '<div class="col-lg-5 pull-left">' +
@@ -683,7 +693,7 @@ var DiamondScope = (function () {
                 '</div>' +
                 '</div>' +
                 '</div>' +
-                '<div class="container-fluid answer-box">' +
+                '<div class="container-fluid" id="answer-box">' +
                 '<div class="container-fluid">' +
                 '<div class="col-md-12 rounded-div main-design answer" data-id="0">' +
                 '<h4 id="tag-a" class="pull-left vertical-center-2 audience" data-container=".answer[data-id=0]">A</h4>' +
