@@ -245,6 +245,16 @@ var DiamondScope = (function () {
     var game;
     var widthBefore = -1;
     var prediff = -1;
+    var intervalLength = 1/0;
+    var interval = setInterval(function(){ 
+        content = '';
+        if(intervalLength-- < 1) {
+            content = 'Bitte beantworten sie die Frage!';
+        } else {
+            content = (intervalLength >= 60) ? 1 + ':0' + (intervalLength - 60) : (intervalLength < 10 )? '0:0' + intervalLength : '0:' + intervalLength;
+        }
+        $('#timer').html(content);
+    }, 1000);
 
     var init = function () {
         eventhandler();
@@ -372,6 +382,30 @@ var DiamondScope = (function () {
         if (widthBefore == -1) {
             widthBefore = ($(window).width() < 1200) ? 1400 : 1000;
         }
+        
+        if (($('#main-card').innerHeight()) < ($('#content-div').innerHeight())) {
+             widthBefore = 1400;
+            $('body > .container-fluid').css('height', '0');
+            $('body > #main-center.container-fluid').css({
+                'height': '99%'
+            });
+            $('#main-card').css('margin', '0.5%');
+            $('#video-background, #video-background-inner').attr('src', '');
+            $('#video-background-inner').css({
+                'left': '0',
+                'top': '0',
+                'width': '100%'
+            });
+            $('body, *').css('font-weight', 300);
+            
+            
+             $('#main-card').css({
+                 'overflow': 'scroll'
+             })
+             $('#video-background-inner').css({
+                 'position': 'fixed'
+             })
+        }
 
         if ($(window).width() < 1200 && widthBefore >= 1200) {
             $('body > .container-fluid').css('height', '0');
@@ -423,7 +457,6 @@ var DiamondScope = (function () {
                 'height': 'auto'
             })
         }
-        
         
         if (($('#main-card').innerHeight()) < ($('#content-div').innerHeight())) {
             var answer_height = ($('#main-card').outerHeight()) - ($('#question-box').outerHeight())
@@ -682,6 +715,9 @@ var DiamondScope = (function () {
                 '<div class="col-lg-5 pull-left">' +
                 '<img src="assets/svgs/quzzeldull_logo_text_horizontal.svg" class="img-responsive" alt="Diamond Scope">' +
                 '</div>' +
+                '<div class="col-lg-3">' +
+                '<h4 id="timer"></h4>' +
+                '</div>' +
                 '<div class="col-lg-4 pull-right">' +
                 '<div class="main-design" id="current-question">' +
                 '<h3>Frage X</h3>' +
@@ -860,6 +896,8 @@ var DiamondScope = (function () {
                 question.scrambledAnswers[i] = question.scrambledAnswers[j];
                 question.scrambledAnswers[j] = temp;
             }
+            
+            intervalLength = 62 - (Math.floor(Math.random()*5));
 
             //Difficulty
             category = " (Kategorie: " + (difficulty + 1) + ")";
