@@ -52,8 +52,8 @@
      background-color: black;
  }
  
- .question-box,
- answer-box {
+ #question-box,
+ #answer-box {
      height: 50%;
  }
  
