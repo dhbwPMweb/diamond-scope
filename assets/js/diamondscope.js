@@ -433,6 +433,12 @@ var DiamondScope = (function () {
                 'overflow': 'scroll'
             })
         }
+        else {
+            $('#answer-box').css({
+                'height': '',
+                'overflow': 'hidden'
+            })
+        }
 
         verticalAlign();
 
