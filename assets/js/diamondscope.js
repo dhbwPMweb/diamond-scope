@@ -583,7 +583,7 @@ var DiamondScope = (function () {
                 '<h1>Multiplayer</h1>' +
                 '</div><div class="clearfix"></div>' +
                 '<div class="menu-button col-centered rounded-div main-design btn" id="sound-button">' +
-                '<h1><span class="main-design glyphicon glyphicon-music"></span>Musik aus</h1>' +
+                '<h1><span class="main-design glyphicon glyphicon-music"></span>Sound</h1>' +
                 '</div>' +
                 '</div>';
 
